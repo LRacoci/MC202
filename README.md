@@ -6,7 +6,7 @@ Este repositório é privado para não haver risco de alguém copiar e submeter 
 ##Comentários:
 ###MC102
 > Concluido
-Notas: 
+Notas: 8,3
   * Prova 1: 5,5
   * Prova 2: 6,5
   * Prova 3: 7,6
@@ -15,3 +15,10 @@ Notas:
   * Média: 8,3
   
 ###MC202
+> Notas: 8,3
+  * Prova 1: 
+  * Prova 2: 
+  * Prova 3: 
+  * Media das Provas: 
+  * Laboratórios: 
+  * Média: 
