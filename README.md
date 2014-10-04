@@ -15,8 +15,7 @@ Notas: 8,3
   * Média: 8,3
   
 ###MC202
-> 
-Notas:
+> Notas:
   * Prova 1: 
   * Prova 2: 
   * Prova 3: 
