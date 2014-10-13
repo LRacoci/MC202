@@ -1,0 +1,41 @@
+void espalha_agua(Fila_Ordenada *fila, Mapa **matriz, int H, int W) {
+    PFila_Ordenada temp;
+    PFila aux;
+    
+    temp = fila;
+    
+    while ((temp->interna_inicio == NULL) && (temp->prox != NULL)) {
+        temp = temp->prox;
+    }
+    
+    if (temp->prox == NULL) {
+        return;
+    }
+    
+    aux = temp->interna_inicio;
+        
+    if (((aux->i-1) >= 0) && (matriz[aux->i-1][aux->j].rotulo == '*')) {
+        enfila(temp, aux->i - 1, aux->j, matriz);
+        matriz[aux->i-1][aux->j].rotulo = matriz[aux->i][aux->j].rotulo;    
+    }
+    
+    if (((aux->j-1) >= 0) && (matriz[aux->i][aux->j-1].rotulo == '*')) {
+        enfila(temp, aux->i, aux->j - 1, matriz);
+        matriz[aux->i][aux->j-1].rotulo = matriz[aux->i][aux->j].rotulo;
+    }
+    
+    if (((aux->j+1) < W) && (matriz[aux->i][aux->j+1].rotulo == '*')) {
+        enfila(temp, aux->i, aux->j + 1, matriz);
+        matriz[aux->i][aux->j+1].rotulo = matriz[aux->i][aux->j].rotulo;
+    }
+    
+    if (((aux->i+1) < H) && (matriz[aux->i+1][aux->j].rotulo == '*')) {
+        enfila(temp, aux->i + 1, aux->j, matriz);
+        matriz[aux->i+1][aux->j].rotulo = matriz[aux->i][aux->j].rotulo;
+    }
+    
+    desenfila(temp);
+    
+    espalha_agua(fila, matriz, H, W);
+    
+}
