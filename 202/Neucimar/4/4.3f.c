@@ -1,5 +1,5 @@
 /* Nome: Seu nome aqui 
-* RA: Seu RA aqui 
+ * RA: Seu RA aqui 
 * Laboratorio 04 - Quicksort aleatorizado */
 
 #include <stdio.h>
@@ -8,8 +8,6 @@
 /* STRUCS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
 /*************************************************************/
 
-/* Função genérica que troca dois inteiros */
-void troca(int* a, int* b);
 /* Função auxiliar que só funciona nesse programa */
 void copia(int aux[], int v[], int inicio, int fim);
 /* Função auxiliar do quicksort que retorna a posição real do pivo escolhido */
@@ -47,11 +45,6 @@ int main() {
 /* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
 /****************************************/
 
-void troca(int* a, int* b) {
-	int tmp = *a;
-	*a = *b;
-	*b = tmp;
-}
 void copia(int aux[], int v[], int inicio, int fim){
 	int i, n = fim - inicio + 1;
 	for(i = 0; i < n; i++){

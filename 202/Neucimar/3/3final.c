@@ -2,12 +2,11 @@
  * RA: 156331 
  * Laboratorio 03 - Linha Divisora de Aguas */
 
-/* STRUCS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
-/*************************************************************/
-
 #include <stdio.h>
 #include <stdlib.h>
 
+/* STRUCS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
+/*************************************************************/
 
 /* Fila mono-ligada circular com no cabeça */
 typedef struct fila { 
