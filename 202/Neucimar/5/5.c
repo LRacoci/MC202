@@ -12,16 +12,18 @@
 #define MAX_TIPO 8
 #define MAX_NOME 10
 
-/* Lista */
-typedef struct lista { 
-
-	struct lista * prox;
-
-} No, *Lista; 
-
+/* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
 typedef enum bool{false, true} bool;
 
-/* TAD: Listas Ligadas*/
+typedef struct lista { 
+	int tamanho;
+	bool ocupado;
+	struct lista *e, *d;
+} No, *Lista, **Head;
+
+
+
+/* TAD: Lista Duplamente Ligada, c*/
 
 /* TAD: */
 
@@ -38,8 +40,8 @@ int Converte_pra_K(char X){
 	}
 }
 
-imprime_disco(Disco){
-	
+void imprime_disco(Disco){
+
 }
 
 bool Continua(int N){
@@ -54,7 +56,6 @@ bool Continua(int N){
 	for(i = 0, i < N; i++){
 		scanf("%s %s", tipo, nome);
 		if(strcmp(tipo, "insere") == 0){
-			scanf("%d%c%c", );
 		}else if(strcmp(tipo, "remove") == 0){
 
 		}else if(strcmp(tipo, "otimiza") == 0){
