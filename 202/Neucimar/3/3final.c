@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 
+/* Fila mono-ligada circular com no cabeça */
 typedef struct fila { 
 	int i, j;
 	char rotulo;
@@ -26,9 +27,6 @@ typedef struct fila_ordenada {
 #define MAX 100
 
 typedef enum bool{false, true} bool;
-
-/* TAD de Matrizes Dinâmicas */
-/****************************/
 
 /* TAD: Filas Ordenadas */
 void criaFilaOrdenada(FilaOrdenada * F, int n);
@@ -156,7 +154,7 @@ void removeFilaOrdenada(FilaOrdenada F){
 	free(F->fila);
 	free(F);
 }
-
+/* Cria fila na posição pos */
 void criaFila(FilaOrdenada F, int pos){
 	Fila * f = &(F->fila[pos]);
 	*f = (Fila)malloc(sizeof(No));
@@ -168,10 +166,12 @@ void criaFila(FilaOrdenada F, int pos){
 	
 	(F->num_filas)++;
 }
-
+/* Enfila caso a fila exista, caso contrário cria-se uma fila e enfila-se nela */
 void enfila(FilaOrdenada F, int i, int j, int pos, char rotulo){
 	Fila * f = &(F->fila[pos]), novo;
+	/* Se a posição não tiver uma fila... */
 	if((*f) == NULL){
+		/* Uma nova fila é criada */
 		criaFila(F, pos);
 	}
 	novo = (Fila)malloc(sizeof(No));
