@@ -18,16 +18,16 @@ void cria_no_final(Lista ini, int info, int freq){
 	novo->esq->dir = novo;
 }
 /* Cria nó e o insere depois de P*/
-void cria_no_final(Lista ini, P, int info, int freq){
+void cria_depois(Lista ini, No* P, int info, int freq){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	novo->info = info;
 	novo->freq = freq;
 
-	novo->dir = ini;
-	novo->esq = (ini)->esq;
-	(ini)->esq = novo;
-	novo->esq->dir = novo;
+	novo->dir = P->dir;
+	novo->esq = P;
+	P->dir = novo;
+	novo->dir->esq = novo;
 }
 
 /* Retira da lista o nó na posição B e insere antes de A */
@@ -70,7 +70,7 @@ void removeNo(Lista ini, No * A){
 }
 /* Desaloca uma lista inteira*/
 void removeLista(Head h){
-	/*(*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça*/
+	/* (*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça */
 	Lista temp, p = (*h)->dir;
 	while(p != *h){
 		temp = p;
