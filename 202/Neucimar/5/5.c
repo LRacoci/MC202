@@ -18,7 +18,7 @@ typedef enum bool{false, true, head} bool;
 typedef struct lista { 
 	int tamanho;
 	bool ocupado;
-	struct lista *e, *d;
+	struct lista *esq, *dir;
 } No, *Lista, **Head;
 
 
@@ -26,8 +26,8 @@ typedef struct lista {
 /* TAD: Listas Duplamente Ligadas, Circulares com Nós Cabeças*/
 
 void cria_lista(Head nova_lista);
-void cria_no_final(Lista ini, int info, int freq);
-void cria_depois(Lista ini, No* P, int info, int freq);
+void cria_no_final(Lista ini, int tamanho);
+void cria_depois(Lista ini, No* P, int tamanho);
 void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
 void removeNo(Lista ini, No * A);
@@ -38,26 +38,43 @@ void removeLista(Head h);
 /* assinatura de outras funções */
 /********************************/
 int Converte_pra_K(char X){
-	switch ((int) X)) {
-	case ((int)'K'):
+	switch ((int)(X)) {
+	case ((int)('K'):
 		return 1;
-	case ((int)'M'):
+	case ((int)('M')):
 		return 1024;
-	case ((int)'G'):
+	case ((int)('G')):
 		return 1024 * 1024;
 	}
 }
 
-void imprime_disco(Lista disco){
+void imprime_celula(double P){
+
+}
+void imprime_disco(Lista ini, int D){
+	No* p = ini;
+	double aux = 0, cel, max = D/8.0;
+	for (p = ini->prox; p != ini; p = p->prox) {
+		if(cel <= max){
+			if(p->ocupado) 
+				cel += p->tam;
+
+		}else{
+			cel = cel - max;
+			imprime_celula(0);
+		}
+		imprime_celula((max - cel)/max);
+	}
+
 
 }
 bool insere(Lista disco, int D){
 	bool cheio;
 	char nome[MAX_NOME], unidade, lixo;
 	int tam;
-	scanf("%s %d%c%c", nome, &tam, %unidade, &lixo);
+	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 	tam = tam * Converte_pra_K(unidade);
-	atribui_no_final(disco, D - tam);
+	/*atribui_no_final(disco, D - tam);*/
 	cria_no_final(disco, tam);
 }
 
@@ -118,28 +135,28 @@ int main() {
 /* Cria o nó cabeça*/
 void cria_lista(Head nova_lista){
 	*nova_lista = (Lista)malloc(sizeof(No));
-	(*nova_lista)->info = -1;
+	(*nova_lista)->tamanho = -1;
+	(*nova_lista)->ocupado = head;
+
 	(*nova_lista)->dir = *nova_lista;
 	(*nova_lista)->esq = *nova_lista;
 }
 /* Cria um nó e o insere no final da lista, antes do no cabeça*/
-void cria_no_final(Lista ini, int info, int freq){
+void cria_no_final(Lista ini, int tamanho){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
-	novo->info = info;
-	novo->freq = freq;
+	novo->tamanho = tamanho;
 
 	novo->dir = ini;
-	novo->esq = (ini)->esq;
+	novo->esq = ini->esq;
 	ini->esq = novo;
 	novo->esq->dir = novo;
 }
 /* Cria nó e o insere depois de P*/
-void cria_depois(Lista ini, No* P, int info, int freq){
+void cria_depois(Lista ini, No* P, int tamanho){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
-	novo->info = info;
-	novo->freq = freq;
+	novo->tamanho = tamanho;
 
 	novo->dir = P->dir;
 	novo->esq = P;
