@@ -10,12 +10,13 @@
 /*************************************************************/
 
 #define MAX_TIPO 8
-#define MAX_NOME 10
+#define MAX_NOME 11
 
 /* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
 typedef enum bool{false, true, head} bool;
 
 typedef struct lista { 
+	char nome[MAX_NOME]
 	int tamanho;
 	bool ocupado;
 	struct lista *esq, *dir;
@@ -26,14 +27,25 @@ typedef struct lista {
 /* TAD: Listas Duplamente Ligadas, Circulares com Nós Cabeças*/
 
 void cria_lista(Head nova_lista);
-void cria_no_final(Lista ini, int tamanho);
-void cria_depois(Lista ini, No* P, int tamanho);
+void cria_no_final(Lista ini, char nome[], int tamanho);
+void cria_depois(Lista ini, No* P, char nome[], int tamanho);
 void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
 void removeNo(Lista ini, No * A);
 void removeLista(Head h);
+void pLst(Lista ini){
+	No* p;
+	for(p = ini->prox; p != ini; p = p->prox){
+		if(p->ocupado == true)
+			printf("\033[95m");
+		else
+			printf("\033[92m");
+		printf("%s: %dKb\n", p->nome, p-<tamanho);
+	}
+	printf("\033[97m\n");
+}
 
-/* TAD: */
+/* TAD: Disco Implementado com Listas Ligadas */
 
 /* assinatura de outras funções */
 /********************************/
@@ -53,17 +65,13 @@ void imprime_celula(double P){
 }
 void imprime_disco(Lista ini, int D){
 	No* p = ini;
-	double aux = 0, cel, max = D/8.0;
-	for (p = ini->prox; p != ini; p = p->prox) {
-		if(cel <= max){
-			if(p->ocupado) 
-				cel += p->tam;
+	double aux = 0, livre = 0;
+	int max = D/8.0, i = 0, aux;
+	
+	for (p = ini->prox; p != ini;) {
 
-		}else{
-			cel = cel - max;
-			imprime_celula(0);
-		}
-		imprime_celula((max - cel)/max);
+
+	
 	}
 
 
@@ -74,8 +82,8 @@ bool insere(Lista disco, int D){
 	int tam;
 	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 	tam = tam * Converte_pra_K(unidade);
-	/*atribui_no_final(disco, D - tam);*/
-	cria_no_final(disco, tam);
+	if(disco->esq->tamanho - tam < 0) otimiza(disco);
+	cria_no_final(disco, nome, tam);
 }
 
 
@@ -135,17 +143,22 @@ int main() {
 /* Cria o nó cabeça*/
 void cria_lista(Head nova_lista){
 	*nova_lista = (Lista)malloc(sizeof(No));
+	
+	(*nova_lista)->nome = "Head";
 	(*nova_lista)->tamanho = -1;
-	(*nova_lista)->ocupado = head;
+	(*nova_lista)->ocupado = true;
 
 	(*nova_lista)->dir = *nova_lista;
 	(*nova_lista)->esq = *nova_lista;
 }
 /* Cria um nó e o insere no final da lista, antes do no cabeça*/
-void cria_no_final(Lista ini, int tamanho){
+void cria_no_final(Lista ini, char nome[], int tamanho){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
+	
 	novo->tamanho = tamanho;
+	novo->nome = nome;
+	novo->ocupado = true;
 
 	novo->dir = ini;
 	novo->esq = ini->esq;
@@ -153,17 +166,20 @@ void cria_no_final(Lista ini, int tamanho){
 	novo->esq->dir = novo;
 }
 /* Cria nó e o insere depois de P*/
-void cria_depois(Lista ini, No* P, int tamanho){
+void cria_depois(Lista ini, No* P, char nome[], int tamanho){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
+	
 	novo->tamanho = tamanho;
+	novo->nome = nome;
+	novo->ocupado = true;
+
 
 	novo->dir = P->dir;
 	novo->esq = P;
 	P->dir = novo;
 	novo->dir->esq = novo;
 }
-
 /* Retira da lista o nó na posição B e insere antes de A */
 void transpB2bA(Lista ini, No* A, No* B){
 	if(A == ini || B == ini || A == B)
