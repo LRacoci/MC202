@@ -28,14 +28,15 @@ typedef struct lista {
 
 void cria_lista(Head nova_lista);
 void cria_no_final(Lista ini, char nome[], int tamanho);
-void cria_depois(Lista ini, No* P, char nome[], int tamanho);
+void atribui_tamanho(Lista ini, No* p, int tam);
 void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
 void removeNo(Lista ini, No * A);
 void removeLista(Head h);
+
 void pLst(Lista ini){
 	No* p;
-	for(p = ini->prox; p != ini; p = p->prox){
+	for(p = ini->dir; p != ini; p = p->dir){
 		if(p->ocupado == true)
 			printf("\033[95m");
 		else
@@ -68,7 +69,7 @@ void imprime_disco(Lista ini, int D){
 	double aux = 0, livre = 0;
 	int max = D/8.0, i = 0, aux;
 	
-	for (p = ini->prox; p != ini;) {
+	for (p = ini->dir; p != ini;) {
 
 
 	
@@ -80,11 +81,25 @@ bool insere(Lista disco, int D){
 	bool cheio;
 	char nome[MAX_NOME], unidade, lixo;
 	int tam;
+	No* p;
 	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 	tam = tam * Converte_pra_K(unidade);
-	if(disco->esq->tamanho - tam < 0) otimiza(disco);
-	cria_no_final(disco, nome, tam);
+
+	if(disco->tamanho + tam > D) return true;
+
+	for(p = disco->dir; p != disco; p = p->dir){
+		if(p->ocupado == false && p->tam >= tam){
+			atribui_tamanho(disco, p, p->tam - tam)
+			cria_antes(disco, p, nome, tam);
+		}
+	}
+	otimiza(disco, D);
+	p = disco->esq;
+	if(p->ocupado == false && tam <= p->tam){
+
+	}
 }
+bool
 
 
 bool Continua(int N){
@@ -100,16 +115,16 @@ bool Continua(int N){
 	scanf("%d%c%c", &D, &unidade, &lixo);
 	D = D * Converte_pra_K(unidade);
 	cria_lista(&disco);
-	cria_no_final(disco, D);
+	cria_no_final(disco, 0);
 	
-	for(i = 0, i < N; i++){
+	for(i = 0, i < N && !cheio; i++){
 		scanf("%s", tipo);
 		if(strcmp(tipo, "insere") == 0)
 			cheio = insere(disco, D);
 		else if(strcmp(tipo, "remove") == 0)
-			cheio = remove(disco);
+			cheio = remove(disco, D);
 		else if(strcmp(tipo, "otimiza") == 0)
-			cheio = otimiza(disco)
+			cheio = otimiza(disco, D)
 	}
 	
 	removeLista(&disco);
@@ -145,7 +160,7 @@ void cria_lista(Head nova_lista){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
 	(*nova_lista)->nome = "Head";
-	(*nova_lista)->tamanho = -1;
+	(*nova_lista)->tamanho = 0;
 	(*nova_lista)->ocupado = true;
 
 	(*nova_lista)->dir = *nova_lista;
@@ -157,6 +172,7 @@ void cria_no_final(Lista ini, char nome[], int tamanho){
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tamanho = tamanho;
+	ini->tam += tamanho;
 	novo->nome = nome;
 	novo->ocupado = true;
 
@@ -165,20 +181,26 @@ void cria_no_final(Lista ini, char nome[], int tamanho){
 	ini->esq = novo;
 	novo->esq->dir = novo;
 }
-/* Cria nó e o insere depois de P*/
-void cria_depois(Lista ini, No* P, char nome[], int tamanho){
+/* Cria nó e o insere antes de P*/
+void cria_antes(Lista ini, No* P, char nome[], int tamanho){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tamanho = tamanho;
+	ini->tam += tamanho;
 	novo->nome = nome;
 	novo->ocupado = true;
 
 
-	novo->dir = P->dir;
-	novo->esq = P;
-	P->dir = novo;
-	novo->dir->esq = novo;
+	novo->dir = P;
+	novo->esq = P->esq;
+	P->esq = novo;
+	novo->esq->dir = novo;
+}
+void atribui_tamanho(Lista ini, No* p, int tam){
+	ini->tam -= p->tam;
+	p->tam = tam;
+	ini->tam += p->tam;
 }
 /* Retira da lista o nó na posição B e insere antes de A */
 void transpB2bA(Lista ini, No* A, No* B){
@@ -214,6 +236,7 @@ void removeNo(Lista ini, No * A){
 	if(A == ini)
 		return;
 
+	ini->tam -= A->tam;
 	A->dir->esq = A->esq;
 	A->esq->dir = A->dir;
 	free(A);
