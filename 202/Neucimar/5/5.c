@@ -26,7 +26,8 @@ typedef struct lista {
 /************************************************************/
 
 void cria_lista(Head nova_lista, int D);
-void cria_no_final(Lista ini, char nome[], int tam);
+void cria_primeiro(Lista ini, char nome[], int tam);
+void cria_antes(Lista ini, No* P, char nome[], int tam);
 void atribui_tam(Lista ini, No* p, int tam);
 void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
@@ -42,6 +43,7 @@ void imprime_disco(Lista ini, int D);
 bool otimiza_disco(Lista disco, int D);
 bool insere(Lista disco, int D);
 void remove_disco(Lista disco);
+void mescla(Lista disco, No * p);
 
 /* assinatura de outras funções */
 /********************************/
@@ -78,8 +80,7 @@ bool Continua(int N){
 	D = D * Converte_pra_K(unidade);
 	
 	cria_lista(&disco, D);
-	cria_no_final(disco, "", D);
-	disco->dir = false;
+	cria_primeiro(disco, "", D);
 	
 	for(i = 0; (i < N) && (!cheio); i++){
 		scanf("%s", tipo);
@@ -91,11 +92,11 @@ bool Continua(int N){
 			cheio = otimiza_disco(disco, D);
 	}
 	
-	removeLista(&disco);
-	
 	if(cheio) printf("ERRO: disco cheio\n");
 	else imprime_disco(disco, D);
 
+	removeLista(&disco);
+	
 	return true;
 }
 
@@ -107,8 +108,8 @@ int Converte_pra_K(char X){
 		return 1024;
 	case ((int)('G')):
 		return 1024 * 1024;
-		break;
 	}
+	return -1;
 }
 
 /* TAD de Disco, implementado com Listas Ligadas */
@@ -142,7 +143,7 @@ bool otimiza_disco(Lista disco, int D){
 	}
 	if(D < disco->tam) return true;
 	
-	cria_no_final(disco, "", D - disco->tam);
+	cria_primeiro(disco, "", D - disco->tam);
 	
 	disco->esq->ocupado = false;
 	
@@ -175,15 +176,28 @@ bool insere(Lista disco, int D){
 }
 void remove_disco(Lista disco){
 	char nome[MAX_NOME];
-	No* P;
+	No* p;
 	scanf("%s", nome);
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(strcmp(nome, p->nome) == 0){
+			p->nome = "";
 			p->ocupado = false;
 			disco->tam -= p->tam;
+			mescla(disco, p);
 		}
 	}
 }
+void mescla(Lista disco, No * p){
+	if(!(p->dir->ocupado)){
+		p->tam += p->dir->tam;
+		removeNo(disco, p->dir);
+	}
+	if(!(p->esq->ocupado)){
+		p->tam += p->esq->tam;
+		removeNo(disco, p->esq);
+	}
+}
+
 /* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
 /*****************************************/
 /****************************************/
@@ -196,21 +210,21 @@ void cria_lista(Head nova_lista, int D){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
 	(*nova_lista)->nome = "Head";
-	(*nova_lista)->tam = D;
+	(*nova_lista)->tam = 0;
 	(*nova_lista)->ocupado = true;
 
 	(*nova_lista)->dir = *nova_lista;
 	(*nova_lista)->esq = *nova_lista;
 }
 /* Cria um nó e o insere no final da lista, antes do no cabeça*/
-void cria_no_final(Lista ini, char nome[], int tam){
+void cria_primeiro(Lista ini, char nome[], int tam){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tam = tam;
-	ini->tam += tam;
-	novo->nome = nome;
-	novo->ocupado = true;
+	novo->nome = malloc(MAX_NOME * sizeof(char));
+	novo->nome = strcpy(novo->nome, nome);
+	novo->ocupado = false;
 
 	novo->dir = ini;
 	novo->esq = ini->esq;
@@ -224,7 +238,8 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	
 	novo->tam = tam;
 	ini->tam += tam;
-	novo->nome = nome;
+	novo->nome = malloc(MAX_NOME * sizeof(char));
+	novo->nome = strcpy(novo->nome, nome);
 	novo->ocupado = true;
 
 
@@ -245,6 +260,7 @@ void removeNo(Lista ini, No * A){
 		return;
 
 	ini->tam -= A->tam;
+	free(A->nome);
 
 	A->dir->esq = A->esq;
 	A->esq->dir = A->dir;
@@ -254,9 +270,10 @@ void removeNo(Lista ini, No * A){
 void removeLista(Head h){
 	/* (*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça */
 	Lista temp, p = (*h)->dir;
-	while(p != *h){
+	while(p != (*h)){
 		temp = p;
 		p = p->dir;
+		free(temp->nome);
 		free(temp);
 	}
 	free(p);
@@ -265,11 +282,12 @@ void removeLista(Head h){
 
 void pLst(Lista ini){
 	No* p;
+	printf("Disco com %d Kb ocupados\n", ini->tam);
 	for(p = ini->dir; p != ini; p = p->dir){
 		if(p->ocupado == true)
-			printf("\033[95m");
+			printf("\033[94m");
 		else
-			printf("\033[92m");
+			printf("\033[91m");
 		printf("%s: %dKb\n", p->nome, p->tam);
 	}
 	printf("\033[97m\n");
