@@ -91,7 +91,7 @@ bool Continua(int N){
 		else if(strcmp(tipo, "otimiza") == 0)
 			cheio = otimiza_disco(disco, D);
 		else{
-			printf("\033[91mERRO: Operaçao desconhecida\033[97m\n");
+			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
 	}
@@ -143,6 +143,7 @@ bool otimiza_disco(Lista disco, int D){
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == true){
 			removeNo(disco, p);
+			disco->tam -= p->tam;
 		}
 	}
 	if(disco->tam < 0) return true;
@@ -158,7 +159,7 @@ bool insere(Lista disco, int D){
 	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 	tam = tam * Converte_pra_K(unidade);
 
-	if(disco->tam - tam > 0) return true;
+	if(disco->tam - tam < 0) return true;
 
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == false && p->tam >= tam){
@@ -184,7 +185,7 @@ void remove_disco(Lista disco){
 		if(strcmp(nome, p->nome) == 0){
 			p->nome = "";
 			p->ocupado = false;
-			disco->tam -= p->tam;
+			disco->tam += p->tam;
 			mescla(disco, p);
 		}
 	}
@@ -251,9 +252,7 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	novo->esq->dir = novo;
 }
 void atribui_tam(Lista ini, No* p, int tam){
-	ini->tam += p->tam;
 	p->tam = tam;
-	ini->tam -= p->tam;
 }
 /*Remove o nó na posição A*/
 void removeNo(Lista ini, No * A){
@@ -284,7 +283,7 @@ void removeLista(Head h){
 
 void pLst(Lista ini){
 	No* p;
-	printf("Disco com %d Kb ocupados\n", ini->tam);
+	printf("Disco com %d Kb livres\n", ini->tam);
 	for(p = ini->dir; p != ini; p = p->dir){
 		if(p->ocupado == true)
 			printf("\033[94m");
