@@ -90,6 +90,10 @@ bool Continua(int N){
 			remove_disco(disco);
 		else if(strcmp(tipo, "otimiza") == 0)
 			cheio = otimiza_disco(disco, D);
+		else{
+			printf("\033[91mERRO: Operaçao desconhecida\033[97m\n");
+			exit(1);
+		}
 	}
 	
 	if(cheio) printf("ERRO: disco cheio\n");
@@ -141,11 +145,9 @@ bool otimiza_disco(Lista disco, int D){
 			removeNo(disco, p);
 		}
 	}
-	if(D < disco->tam) return true;
+	if(disco->tam < 0) return true;
 	
-	cria_primeiro(disco, "", D - disco->tam);
-	
-	disco->esq->ocupado = false;
+	cria_primeiro(disco, "", disco->tam);
 	
 	return false;
 }
@@ -156,7 +158,7 @@ bool insere(Lista disco, int D){
 	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 	tam = tam * Converte_pra_K(unidade);
 
-	if(disco->tam + tam > D) return true;
+	if(disco->tam - tam > 0) return true;
 
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == false && p->tam >= tam){
@@ -210,7 +212,7 @@ void cria_lista(Head nova_lista, int D){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
 	(*nova_lista)->nome = "Head";
-	(*nova_lista)->tam = 0;
+	(*nova_lista)->tam = D;
 	(*nova_lista)->ocupado = true;
 
 	(*nova_lista)->dir = *nova_lista;
@@ -237,7 +239,7 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tam = tam;
-	ini->tam += tam;
+	ini->tam -= tam;
 	novo->nome = malloc(MAX_NOME * sizeof(char));
 	novo->nome = strcpy(novo->nome, nome);
 	novo->ocupado = true;
@@ -249,9 +251,9 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	novo->esq->dir = novo;
 }
 void atribui_tam(Lista ini, No* p, int tam){
-	ini->tam -= p->tam;
-	p->tam = tam;
 	ini->tam += p->tam;
+	p->tam = tam;
+	ini->tam -= p->tam;
 }
 /*Remove o nó na posição A*/
 void removeNo(Lista ini, No * A){
@@ -259,7 +261,7 @@ void removeNo(Lista ini, No * A){
 	if(A == ini)
 		return;
 
-	ini->tam -= A->tam;
+	ini->tam += A->tam;
 	free(A->nome);
 
 	A->dir->esq = A->esq;
