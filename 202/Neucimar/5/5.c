@@ -84,8 +84,10 @@ bool Continua(int N){
 	
 	for(i = 0; (i < N) && (!cheio); i++){
 		scanf("%s", tipo);
-		if(strcmp(tipo, "insere") == 0)
+		if(strcmp(tipo, "insere") == 0){
 			cheio = insere(disco, D);
+			imprime_disco(disco, D);
+		}
 		else if(strcmp(tipo, "remove") == 0)
 			remove_disco(disco);
 		else if(strcmp(tipo, "otimiza") == 0)
@@ -123,25 +125,43 @@ int Converte_pra_K(char X){
 void imprime_celula(double P){
 	P *= 100;
 	if ((75 < P) && (P <= 100)) 
-		printf("[#]");
+		printf("[ ]");
 	else if((25 < P) && (P <= 75)) 
 		printf("[-]");
 	else if((0 <= P) && (P <= 25)) 
-		printf("[ ]");
+		printf("[#]");
 }
 void imprime_disco(Lista ini, int D){
-	/*No* p = ini;
+	No* p = ini;
 	double livre = 0;
-	int max = D/8.0, i = 0, aux = 0;*/
+	double parte = D/8.0, jl = 0;
 	pLst(ini);
-	/*for (p = ini->dir; p != ini;) {
-
-	}*/
+	
+	for (p = ini->dir; p != ini; p = p->dir) {
+		jl += p->tam;
+		if(p->ocupado == false){
+			livre += p->tam;
+		}
+		while(jl > parte){
+			jl -= parte;
+			if(livre > parte){
+				livre -= parte;
+				imprime_celula(1);
+			}else{
+				imprime_celula(livre/parte);
+			}
+		}
+		if(jl > 0){
+			imprime_celula(livre/parte);
+		}
+	}
+	/*imprime_celula(livre/parte);*/
+	printf("\n");
 }
 bool otimiza_disco(Lista disco, int D){
 	No* p;
 	for(p = disco->dir; p != disco; p = p->dir){
-		if(p->ocupado == true){
+		if(p->ocupado == false){
 			removeNo(disco, p);
 			disco->tam -= p->tam;
 		}
@@ -183,10 +203,10 @@ void remove_disco(Lista disco){
 	scanf("%s", nome);
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(strcmp(nome, p->nome) == 0){
-			p->nome = "";
 			p->ocupado = false;
 			disco->tam += p->tam;
 			mescla(disco, p);
+			return;
 		}
 	}
 }
@@ -212,7 +232,9 @@ void mescla(Lista disco, No * p){
 void cria_lista(Head nova_lista, int D){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
-	(*nova_lista)->nome = "Head";
+	(*nova_lista)->nome = (char*)malloc(10 * sizeof(char));
+	(*nova_lista)->nome = strcpy((*nova_lista)->nome, "Head");
+
 	(*nova_lista)->tam = D;
 	(*nova_lista)->ocupado = true;
 
@@ -225,7 +247,7 @@ void cria_primeiro(Lista ini, char nome[], int tam){
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tam = tam;
-	novo->nome = malloc(MAX_NOME * sizeof(char));
+	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
 	novo->nome = strcpy(novo->nome, nome);
 	novo->ocupado = false;
 
@@ -241,8 +263,10 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	
 	novo->tam = tam;
 	ini->tam -= tam;
-	novo->nome = malloc(MAX_NOME * sizeof(char));
+
+	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
 	novo->nome = strcpy(novo->nome, nome);
+
 	novo->ocupado = true;
 
 
