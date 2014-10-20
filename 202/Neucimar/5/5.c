@@ -11,6 +11,7 @@
 
 #define MAX_TIPO 8
 #define MAX_NOME 11
+#define MAX_DISCO 8
 
 /* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
 typedef enum bool{false, true, head} bool;
@@ -86,7 +87,7 @@ bool Continua(int N){
 		scanf("%s", tipo);
 		if(strcmp(tipo, "insere") == 0){
 			cheio = insere(disco, D);
-			imprime_disco(disco, D);
+
 		}
 		else if(strcmp(tipo, "remove") == 0)
 			remove_disco(disco);
@@ -96,6 +97,7 @@ bool Continua(int N){
 			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
+		/*imprime_disco(disco, D);*/
 	}
 	
 	if(cheio) printf("ERRO: disco cheio\n");
@@ -135,14 +137,35 @@ void imprime_disco(Lista ini, int D){
 	No* p = ini;
 	double livre = 0;
 	double parte = D/8.0, jl = 0;
+	
+	/*int i;
+	double v[MAX_DISCO];*/
+
 	pLst(ini);
 	
+	/*for(i = 0, i < MAX_DISCO, i++){
+		v[i] = 0;
+	}
+	
+	for(i = 0, i < MAX_DISCO, i++){
+		if(jl + p->tam > parte){
+
+		}else{
+
+		}
+	}*/
+
 	for (p = ini->dir; p != ini; p = p->dir) {
 		jl += p->tam;
 		if(p->ocupado == false){
 			livre += p->tam;
 		}
-		while(jl > parte){
+		if(jl < parte && jl + p->dir->tam > parte){
+			imprime_celula(livre/parte);
+			jl = 0;
+			livre = 0;
+
+		}while(jl >= parte){
 			jl -= parte;
 			if(livre > parte){
 				livre -= parte;
@@ -150,9 +173,6 @@ void imprime_disco(Lista ini, int D){
 			}else{
 				imprime_celula(livre/parte);
 			}
-		}
-		if(jl > 0){
-			imprime_celula(livre/parte);
 		}
 	}
 	/*imprime_celula(livre/parte);*/
@@ -283,7 +303,8 @@ void removeNo(Lista ini, No * A){
 	if(A == ini)
 		return;
 
-	if (A->ocupado) ini->tam += A->tam;
+	if (A->ocupado)
+		ini->tam += A->tam;
 	free(A->nome);
 
 	A->dir->esq = A->esq;
