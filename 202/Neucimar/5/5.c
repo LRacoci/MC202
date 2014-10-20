@@ -163,7 +163,6 @@ bool otimiza_disco(Lista disco, int D){
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == false){
 			removeNo(disco, p);
-			disco->tam -= p->tam;
 		}
 	}
 	if(disco->tam < 0) return true;
@@ -284,7 +283,7 @@ void removeNo(Lista ini, No * A){
 	if(A == ini)
 		return;
 
-	ini->tam += A->tam;
+	if (A->ocupado) ini->tam += A->tam;
 	free(A->nome);
 
 	A->dir->esq = A->esq;
