@@ -1,9 +1,9 @@
 6
-8Mb
-insere arq0001 4Mb
-insere arq0002 1Mb
-insere arq0003 512Kb
+8Kb
+insere arq0001 4Kb
+insere arq0002 1Kb
+insere arq0003 1Kb
 remove arq0001
 remove arq0001
-insere arq0001 5Mb
+insere arq0001 5Kb
 0
