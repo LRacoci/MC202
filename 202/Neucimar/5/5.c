@@ -42,8 +42,8 @@ void pLst(Lista ini);
 void imprime_celula(double P);
 void imprime_disco(Lista ini, int D);
 bool otimiza_disco(Lista disco, int D);
-bool insere(Lista disco, int D);
-void remove_disco(Lista disco);
+bool insere(Lista disco, int D, int tam, char* nome);
+void remove_arquivo(Lista disco, char* nome);
 void mescla(Lista disco, No * p);
 
 /* assinatura de outras funções */
@@ -68,9 +68,9 @@ int main() {
 /*********************************/
 
 bool Continua(int N){
-	int i, D;
+	int i, D, tam;
 	char unidade, lixo;
-	char tipo[MAX_TIPO];
+	char tipo[MAX_TIPO], nome[MAX_NOME];
 	bool cheio = false;
 
 	Lista disco;
@@ -83,17 +83,22 @@ bool Continua(int N){
 	cria_lista(&disco, D);
 	cria_primeiro(disco, "", D);
 	
-	for(i = 0; (i < N) && (!cheio); i++){
+	for(i = 0; i < N; i++){
 		scanf("%s", tipo);
 		if(strcmp(tipo, "insere") == 0){
-			cheio = insere(disco, D);
-
-		}
-		else if(strcmp(tipo, "remove") == 0)
-			remove_disco(disco);
-		else if(strcmp(tipo, "otimiza") == 0)
-			cheio = otimiza_disco(disco, D);
-		else{
+			scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
+			if(!cheio){
+				tam = tam * Converte_pra_K(unidade);
+				cheio = insere(disco, D, tam, nome);
+			}
+		}else if(strcmp(tipo, "remove") == 0){
+			scanf("%s", nome);
+			if(!cheio)
+				remove_arquivo(disco, nome);
+		}else if(strcmp(tipo, "otimiza") == 0){
+			if(!cheio) 
+				cheio = otimiza_disco(disco, D);
+		}else{
 			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
@@ -135,39 +140,49 @@ void imprime_celula(double P){
 }
 void imprime_disco(Lista ini, int D){
 	No* p = ini;
-	double livre = 0;
+	double livres = 0, disco[MAX_DISCO];
 	double parte = D/8.0, jl = 0;
-	
-	/*int i;
-	double v[MAX_DISCO];*/
-
+	int i = 0;
 	pLst(ini);
-	
-	/*for(i = 0, i < MAX_DISCO, i++){
-		v[i] = 0;
+	for(i = 0; i < MAX_DISCO; i++){
+		disco[i] = 0;
+	}
+	for (i = 0, p = ini->dir; p != ini && i < MAX_DISCO; p = p->dir) {
+		jl += p->tam;
+		if(!(p->ocupado)){
+			livres += p->tam;
+		}if(jl < parte){
+			disco[i] += jl - livres;
+		}while(jl >= parte && i < MAX_DISCO){
+			jl -= parte;
+			if(livres >= parte){
+				disco[i] = parte;
+				livres -= parte;
+			}else{
+				disco[i] = livres;
+			}
+			i++;
+		}
 	}
 	
-	for(i = 0, i < MAX_DISCO, i++){
-		if(jl + p->tam > parte){
-
-		}else{
-
-		}
-	}*/
-
-	for (p = ini->dir; p != ini; p = p->dir) {
+	for(i = 0; i < MAX_DISCO; i++){
+		imprime_celula(disco[i]/parte);
+	}
+	printf("\n");
+	/*for (p = ini->dir; p != ini; p = p->dir) {
 		jl += p->tam;
 		if(p->ocupado == false){
 			livre += p->tam;
 		}
-		if(jl < parte && jl + p->dir->tam > parte){
+		if(jl < parte){
+			if(!(p->dir->ocupado)){
+				livre += parte - jl;
+			}
 			imprime_celula(livre/parte);
-			jl = 0;
-			livre = 0;
-
-		}while(jl >= parte){
+		}
+		while(jl >= parte){
 			jl -= parte;
-			if(livre > parte){
+			if(livre >= parte){
 				livre -= parte;
 				imprime_celula(1);
 			}else{
@@ -175,8 +190,7 @@ void imprime_disco(Lista ini, int D){
 			}
 		}
 	}
-	/*imprime_celula(livre/parte);*/
-	printf("\n");
+	printf("\n");*/
 }
 bool otimiza_disco(Lista disco, int D){
 	No* p;
@@ -191,13 +205,9 @@ bool otimiza_disco(Lista disco, int D){
 	
 	return false;
 }
-bool insere(Lista disco, int D){
-	char nome[MAX_NOME], unidade, lixo;
-	int tam;
+bool insere(Lista disco, int D, int tam, char* nome){
 	No* p;
-	scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
-	tam = tam * Converte_pra_K(unidade);
-
+	
 	if(disco->tam - tam < 0) return true;
 
 	for(p = disco->dir; p != disco; p = p->dir){
@@ -216,12 +226,10 @@ bool insere(Lista disco, int D){
 	}else return true;
 	return false;
 }
-void remove_disco(Lista disco){
-	char nome[MAX_NOME];
+void remove_arquivo(Lista disco, char* nome){
 	No* p;
-	scanf("%s", nome);
 	for(p = disco->dir; p != disco; p = p->dir){
-		if(strcmp(nome, p->nome) == 0){
+		if(p->ocupado && strcmp(nome, p->nome) == 0){
 			p->ocupado = false;
 			disco->tam += p->tam;
 			mescla(disco, p);
@@ -303,8 +311,9 @@ void removeNo(Lista ini, No * A){
 	if(A == ini)
 		return;
 
-	if (A->ocupado)
+	if(A->ocupado){
 		ini->tam += A->tam;
+	}
 	free(A->nome);
 
 	A->dir->esq = A->esq;

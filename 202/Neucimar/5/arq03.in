@@ -1,16 +1,3 @@
-<<<<<<< HEAD
-3
-8Mb
-otimiza
-remove aaaaaaaaaa
-insere aaaaaaaaaa 1000Kb
-=======
-4
-16Mb
-insere aaaaaaaaaa 4Mb
-insere bbbbbbbbbb 4Mb
-remove aaaaaaaaaa
-insere cccccccccc 6Mb
 5
 16Mb
 insere aaaaaaaaaa 4Mb
@@ -18,22 +5,4 @@ insere bbbbbbbbbb 4Mb
 remove aaaaaaaaaa
 insere cccccccccc 6Mb
 otimiza
-5
-16Mb
-insere aaaaaaaaaa 4Mb
-insere bbbbbbbbbb 4Mb
-otimiza
-remove aaaaaaaaaa
-insere cccccccccc 6Mb
-8
-8Mb
-otimiza
-otimiza
-remove aaaaaaaaaa
-remove aaaaaaaaaa
-insere aaaaaaaaaa 1000Kb
-insere bbbbbbbbbb 1000Kb
-remove aaaaaaaaaa
-insere cccccccccc 1Mb
->>>>>>> 1d172999223042e44531fa0c01fa4e5965a42a84
 0
