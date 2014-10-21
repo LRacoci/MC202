@@ -183,24 +183,48 @@ bool otimiza_disco(Lista disco, int D){
 	return false;
 }
 bool insere(Lista disco, int D, int tam, char* nome){
-	No* p;
-	
-	if(disco->tam - tam < 0) return true;
+	No *p, *menorlivre;
+	bool tem_menor_ivre = false;
 
+	/* Serve apenas para inicializar menorlivre */
+	Lista aux = (Lista)malloc(sizeof(No));
+	aux->tam = D;
+	menorlivre = aux;
+
+	if(disco->tam < tam) return true;
+
+	/* Acha a posição com menor espaço livre, se tiver */
 	for(p = disco->dir; p != disco; p = p->dir){
-		if(p->ocupado == false && p->tam >= tam){
-			atribui_tam(disco, p, p->tam - tam);
-			cria_antes(disco, p, nome, tam, true);
-			return false;
+		if(p->ocupado == false && menorlivre->tam <= p->tam){
+			menorlivre = p;	
+			tem_menor_ivre = true;		
 		}
 	}
-
-	if(otimiza_disco(disco, D)) return true;
-	p = disco->esq;
-	if(p->ocupado == false && tam <= p->tam){
+	/* Se algum menor livre foi achado */
+	if(tem_menor_ivre){
+		p = menorlivre;
+		/* O arquivo é inserido */
 		atribui_tam(disco, p, p->tam - tam);
 		cria_antes(disco, p, nome, tam, true);
 		return false;
+	}
+	/* Se a função continua executando, nenhuma posição foi encontrada/
+	 * então o disco deve ser otimizado, se essa função retornar disco
+	 * cheio, essa informação é repassada para o retorno de insere*/
+	if(otimiza_disco(disco, D))
+		return true;
+	
+	/* Se a função continua executando a otimização teve sucesso
+	 * então p é posicionado na ultima posição do disco */
+	p = disco->esq;
+	/* Se nessa posição o arquivo a ser inserido couber... */
+	if(p->ocupado == false && tam <= p->tam){
+		/* ... o arquivo é inserido ... */
+		atribui_tam(disco, p, p->tam - tam);
+		cria_antes(disco, p, nome, tam, true);
+		/* ... e o disco não está cheio */
+		return false;
+	/* Caso o arquivo não caiba, o disco está cheio */
 	}else return true;
 	return false;
 }
