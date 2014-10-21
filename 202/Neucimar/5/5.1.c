@@ -28,7 +28,7 @@ typedef struct lista {
 
 void cria_lista(Head nova_lista, int D);
 void cria_primeiro(Lista ini, char nome[], int tam);
-void cria_antes(Lista ini, No* P, char nome[], int tam);
+void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag);
 void atribui_tam(Lista ini, No* p, int tam);
 void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
@@ -143,54 +143,14 @@ void imprime_disco(Lista ini, int D){
 	double livres = 0, disco[MAX_DISCO];
 	double parte = D/8.0, jl = 0;
 	int i = 0;
+	Lista aux;
 	pLst(ini);
-	for(i = 0; i < MAX_DISCO; i++){
-		disco[i] = 0;
-	}
-	for (i = 0, p = ini->dir; p != ini && i < MAX_DISCO; p = p->dir) {
-		jl += p->tam;
-		if(!(p->ocupado)){
-			livres += p->tam;
-		}if(jl < parte){
-			disco[i] += jl - livres;
-		}while(jl >= parte && i < MAX_DISCO){
-			jl -= parte;
-			if(livres >= parte){
-				disco[i] = parte;
-				livres -= parte;
-			}else{
-				disco[i] = livres;
-			}
-			i++;
-		}
-	}
-	
-	for(i = 0; i < MAX_DISCO; i++){
-		imprime_celula(disco[i]/parte);
-	}
-	printf("\n");
-	/*for (p = ini->dir; p != ini; p = p->dir) {
-		jl += p->tam;
-		if(p->ocupado == false){
-			livre += p->tam;
-		}
-		if(jl < parte){
-			if(!(p->dir->ocupado)){
-				livre += parte - jl;
-			}
-			imprime_celula(livre/parte);
-		}
-		while(jl >= parte){
-			jl -= parte;
-			if(livre >= parte){
-				livre -= parte;
-				imprime_celula(1);
-			}else{
-				imprime_celula(livre/parte);
-			}
-		}
-	}
-	printf("\n");*/
+	cria_lista(&aux);
+	copia_lista(aux, ini);
+	picotaLista(aux, parte);
+
+	removeLista(&aux);
+
 }
 bool otimiza_disco(Lista disco, int D){
 	No* p;
@@ -213,7 +173,7 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == false && p->tam >= tam){
 			atribui_tam(disco, p, p->tam - tam);
-			cria_antes(disco, p, nome, tam);
+			cria_antes(disco, p, nome, tam, true);
 			return false;
 		}
 	}
@@ -221,7 +181,7 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	p = disco->esq;
 	if(p->ocupado == false && tam <= p->tam){
 		atribui_tam(disco, p, p->tam - tam);
-		cria_antes(disco, p, nome, tam);
+		cria_antes(disco, p, nome, tam, true);
 		return false;
 	}else return true;
 	return false;
@@ -284,7 +244,7 @@ void cria_primeiro(Lista ini, char nome[], int tam){
 	novo->esq->dir = novo;
 }
 /* Cria nó e o insere antes de P*/
-void cria_antes(Lista ini, No* P, char nome[], int tam){
+void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	
@@ -294,7 +254,7 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
 	novo->nome = strcpy(novo->nome, nome);
 
-	novo->ocupado = true;
+	novo->ocupado = flag;
 
 
 	novo->dir = P;
@@ -303,7 +263,13 @@ void cria_antes(Lista ini, No* P, char nome[], int tam){
 	novo->esq->dir = novo;
 }
 void atribui_tam(Lista ini, No* p, int tam){
-	p->tam = tam;
+	if (p->ocupado) 
+		p->tam = tam;
+	else{
+		ini->tam += p->tam;
+		p->tam = tam;
+		ini->tam -= p->tam;
+	}
 }
 /*Remove o nó na posição A*/
 void removeNo(Lista ini, No * A){
@@ -334,6 +300,37 @@ void removeLista(Head h){
 	*h = NULL;
 }
 
+void copia_lista(Lista A, Lista B){
+	No* pB;
+	if(A->dir != A || A->esq != A){
+		return;
+	}
+	for(pB = B->dir; pB != B; pB = pB->dir){
+		cria_antes(A, A, pB->nome, pB->tam, pB->ocupado);
+	}
+}
+void picotaLista(Lista A, double parte){
+	double jl = 0, aux = 0;
+	No *p;
+	for(p = A->dir; p != A; p = p->dir){
+		jl += p->tam;
+		if(jl < parte){
+			
+		}
+		while(jl > parte){
+			picotaNo(parte);
+			s
+		}
+
+	}
+}
+void picotaNo(Lista A, No* p, double slice){
+	if(p->tam < slice){
+		return;
+	}
+	cria_antes(A, p, p->nome, slice, p->flag);
+	atribui_tam(A, p, p->tam - slice);
+}
 void pLst(Lista ini){
 	No* p;
 	printf("Disco com %d Kb livres\n", ini->tam);
