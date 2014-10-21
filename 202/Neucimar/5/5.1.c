@@ -34,6 +34,9 @@ void transpB2bA(Lista ini, No* A, No* B);
 void transpB2aA(Lista ini, No* A, No* B);
 void removeNo(Lista ini, No * A);
 void removeLista(Head h);
+void copia_lista(Lista A, Lista B);
+void picotaLista(Lista A, double parte);
+void picotaNo(Lista A, No* p, double slice);
 
 void pLst(Lista ini);
 
@@ -139,16 +142,20 @@ void imprime_celula(double P){
 		printf("[#]");
 }
 void imprime_disco(Lista ini, int D){
-	No* p = ini;
-	double livres = 0, disco[MAX_DISCO];
-	double parte = D/8.0, jl = 0;
-	int i = 0;
+	double parte = D/8.0;
+	/*double jl = 0;*/
 	Lista aux;
 	pLst(ini);
-	cria_lista(&aux);
+	cria_lista(&aux, D);
 	copia_lista(aux, ini);
 	picotaLista(aux, parte);
+	pLst(aux);
+	/*for(p = ini->dir; p != ini; p = p->prox){
+		jl += p->tam;
+		if(jl == ){
 
+		}
+	}*/
 	removeLista(&aux);
 
 }
@@ -177,6 +184,7 @@ bool insere(Lista disco, int D, int tam, char* nome){
 			return false;
 		}
 	}
+
 	if(otimiza_disco(disco, D)) return true;
 	p = disco->esq;
 	if(p->ocupado == false && tam <= p->tam){
@@ -215,7 +223,7 @@ void mescla(Lista disco, No * p){
 /* TAD de Listas Duplamente Ligadas, Circulares com Nós Cabeças */
 /***************************************************************/
 
-/* Cria o nó cabeça*/
+/* Cria o nó cabeça */
 void cria_lista(Head nova_lista, int D){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
@@ -228,7 +236,7 @@ void cria_lista(Head nova_lista, int D){
 	(*nova_lista)->dir = *nova_lista;
 	(*nova_lista)->esq = *nova_lista;
 }
-/* Cria um nó e o insere no final da lista, antes do no cabeça*/
+/* Cria um nó e o insere no final da lista, antes do no cabeça */
 void cria_primeiro(Lista ini, char nome[], int tam){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
@@ -243,13 +251,13 @@ void cria_primeiro(Lista ini, char nome[], int tam){
 	ini->esq = novo;
 	novo->esq->dir = novo;
 }
-/* Cria nó e o insere antes de P*/
+/* Cria nó e o insere antes de P */
 void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tam = tam;
-	ini->tam -= tam;
+	if(flag == true) ini->tam -= tam;
 
 	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
 	novo->nome = strcpy(novo->nome, nome);
@@ -263,15 +271,15 @@ void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 	novo->esq->dir = novo;
 }
 void atribui_tam(Lista ini, No* p, int tam){
-	if (p->ocupado) 
-		p->tam = tam;
-	else{
+	if (p->ocupado) {
 		ini->tam += p->tam;
 		p->tam = tam;
 		ini->tam -= p->tam;
+	}else{
+		p->tam = tam;
 	}
 }
-/*Remove o nó na posição A*/
+/* Remove o nó na posição A */
 void removeNo(Lista ini, No * A){
 	
 	if(A == ini)
@@ -286,7 +294,7 @@ void removeNo(Lista ini, No * A){
 	A->esq->dir = A->dir;
 	free(A);
 }
-/* Desaloca uma lista inteira*/
+/* Desaloca uma lista inteira */
 void removeLista(Head h){
 	/* (*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça */
 	Lista temp, p = (*h)->dir;
@@ -310,25 +318,30 @@ void copia_lista(Lista A, Lista B){
 	}
 }
 void picotaLista(Lista A, double parte){
-	double jl = 0, aux = 0;
+	double jl = 0;
 	No *p;
-	for(p = A->dir; p != A; p = p->dir){
-		jl += p->tam;
-		if(jl < parte){
+	for(p = A->dir; p != A;){
+		jl += p->tam;	
+		if(jl < parte && jl + p->dir->tam > parte){
+			p = p->dir;
+			picotaNo(A, p->dir, parte - jl);
+			jl = 0;
+		}else if(jl > parte){
+			jl -= p->tam;
+			picotaNo(A, p, parte - jl);
 			
-		}
-		while(jl > parte){
-			picotaNo(parte);
-			s
+			jl = 0;
+		}else{
+			p = p->dir;
 		}
 
 	}
 }
 void picotaNo(Lista A, No* p, double slice){
-	if(p->tam < slice){
+	if(p->tam <= slice || slice <= 0){
 		return;
 	}
-	cria_antes(A, p, p->nome, slice, p->flag);
+	cria_antes(A, p, p->nome, slice, p->ocupado);
 	atribui_tam(A, p, p->tam - slice);
 }
 void pLst(Lista ini){

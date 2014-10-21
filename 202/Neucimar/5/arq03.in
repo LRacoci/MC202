@@ -1,8 +1,8 @@
 5
-16Mb
-insere aaaaaaaaaa 4Mb
-insere bbbbbbbbbb 4Mb
-remove aaaaaaaaaa
-insere cccccccccc 6Mb
-otimiza
+80Mb
+insere arq1 501Kb
+insere arq2 70Mb
+insere arq3 501Kb
+remove arq2
+insere arq4 79Mb
 0
