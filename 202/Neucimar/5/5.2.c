@@ -105,7 +105,7 @@ bool Continua(int N){
 			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
-		/*imprime_disco(disco, D);*/
+		pLst(disco);
 	}
 	
 	if(cheio) printf("ERRO: disco cheio\n");
@@ -386,7 +386,12 @@ void pLst(Lista ini){
 			printf("\033[94m");
 		else
 			printf("\033[91m");
-		printf("%s: %dKb\n", p->nome, p->tam);
+		if (p->tam > 1024*1024)
+			printf("%s: %.0fGb\n", p->nome, p->tam/(1024*1024.0));
+		else if (p->tam > 1024)
+			printf("%s: %.0fMb\n", p->nome, p->tam/(1024.0));
+		else
+			printf("%s: %dKb\n", p->nome, p->tam);
 	}
 	printf("\033[97m\n");
 }
