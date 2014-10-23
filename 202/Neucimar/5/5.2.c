@@ -14,7 +14,7 @@
 #define MAX_DISCO 8
 
 /* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
-typedef enum bool{false, true, head} bool;
+typedef enum bool{false, true} bool;
 
 typedef struct lista { 
 	char *nome;
@@ -184,28 +184,34 @@ bool otimiza_disco(Lista disco, int D){
 }
 bool insere(Lista disco, int D, int tam, char* nome){
 	No *p, *menorlivre;
-	bool tem_menor_ivre = false;
+	bool tem_menor_livre = false;
 
 	/* Serve apenas para inicializar menorlivre */
 	Lista aux = (Lista)malloc(sizeof(No));
-	aux->tam = D;
+	/* Pra garantir que mesmo que o tamanho da menor partição 
+	 * seja D a função insira nessa partição*/
+	aux->tam = D*2;
 	menorlivre = aux;
 
 	if(disco->tam < tam) return true;
 
 	/* Acha a posição com menor espaço livre, se tiver */
 	for(p = disco->dir; p != disco; p = p->dir){
-		if(p->ocupado == false && menorlivre->tam <= p->tam){
+		if(p->ocupado == false && p->tam < menorlivre->tam && p->tam >= tam){
 			menorlivre = p;	
-			tem_menor_ivre = true;		
+			tem_menor_livre = true;		
 		}
 	}
 	/* Se algum menor livre foi achado */
-	if(tem_menor_ivre){
+	if(tem_menor_livre){
 		p = menorlivre;
 		/* O arquivo é inserido */
 		atribui_tam(disco, p, p->tam - tam);
+		/* Se a atribuição zerou p->tam, o nó pode ser removido */
+		if(p->tam == 0)
+			removeNo(disco, p);
 		cria_antes(disco, p, nome, tam, true);
+		/* ... e o disco não está cheio */
 		return false;
 	}
 	/* Se a função continua executando, nenhuma posição foi encontrada/
@@ -221,6 +227,9 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	if(p->ocupado == false && tam <= p->tam){
 		/* ... o arquivo é inserido ... */
 		atribui_tam(disco, p, p->tam - tam);
+		/* Se a atribuição zerou p->tam, o nó pode ser removido */
+		if(p->tam == 0)
+			removeNo(disco, p);
 		cria_antes(disco, p, nome, tam, true);
 		/* ... e o disco não está cheio */
 		return false;
@@ -240,11 +249,11 @@ void remove_arquivo(Lista disco, char* nome){
 	}
 }
 void mescla(Lista disco, No * p){
-	if(!(p->dir->ocupado)){
+	if(!(p->dir->ocupado) && (p->dir != disco->esq)){
 		p->tam += p->dir->tam;
 		removeNo(disco, p->dir);
 	}
-	if(!(p->esq->ocupado)){
+	if(!(p->esq->ocupado) && (p->esq != disco)){
 		p->tam += p->esq->tam;
 		removeNo(disco, p->esq);
 	}
@@ -380,16 +389,37 @@ void picotaNo(Lista A, No* p, double slice){
 }
 void pLst(Lista ini){
 	No* p;
-	printf("Disco com %d Kb livres\n", ini->tam);
+	
+	p = ini;
+	if (p->tam >= 1024*1024)
+			if (p->tam % (1024*1024))
+				printf("Disco com %.2fGb livres\n", p->tam/(1024*1024.0));
+			else
+				printf("Disco com %.0fGb livres\n", p->tam/(1024*1024.0));
+		else if (p->tam >= 1024)
+			if (p->tam % 1024)
+				printf("Disco com %.2fMb livres\n", p->tam/(1024.0));
+			else
+				printf("Disco com %.0fMb livres\n", p->tam/(1024.0));
+		else
+			printf("Disco com %dKb livres\n", p->tam);
+	
 	for(p = ini->dir; p != ini; p = p->dir){
 		if(p->ocupado == true)
 			printf("\033[94m");
 		else
 			printf("\033[91m");
-		if (p->tam > 1024*1024)
-			printf("%s: %.0fGb\n", p->nome, p->tam/(1024*1024.0));
-		else if (p->tam > 1024)
-			printf("%s: %.0fMb\n", p->nome, p->tam/(1024.0));
+		
+		if (p->tam >= 1024*1024)
+			if (p->tam % (1024*1024))
+				printf("%s: %.2fGb\n", p->nome, p->tam/(1024*1024.0));
+			else
+				printf("%s: %.0fGb\n", p->nome, p->tam/(1024*1024.0));
+		else if (p->tam >= 1024)
+			if (p->tam % 1024)
+				printf("%s: %.2fMb\n", p->nome, p->tam/(1024.0));
+			else
+				printf("%s: %.0fMb\n", p->nome, p->tam/(1024.0));
 		else
 			printf("%s: %dKb\n", p->nome, p->tam);
 	}
