@@ -207,14 +207,10 @@ bool insere(Lista disco, int D, int tam, char* nome){
 		p = menorlivre;
 		/* O arquivo é inserido */
 		atribui_tam(disco, p, p->tam - tam);
-
-		
-		cria_antes(disco, p, nome, tam, true);
-		
 		/* Se a atribuição zerou p->tam, o nó pode ser removido */
+		cria_antes(disco, p, nome, tam, true);
 		if(p->tam == 0)
 			removeNo(disco, p);
-
 		/* ... e o disco não está cheio */
 		return false;
 	}
@@ -231,10 +227,8 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	if(p->ocupado == false && tam <= p->tam){
 		/* ... o arquivo é inserido ... */
 		atribui_tam(disco, p, p->tam - tam);
-		
-		cria_antes(disco, p, nome, tam, true);
-		
 		/* Se a atribuição zerou p->tam, o nó pode ser removido */
+		cria_antes(disco, p, nome, tam, true);
 		if(p->tam == 0)
 			removeNo(disco, p);
 		/* ... e o disco não está cheio */
@@ -255,7 +249,7 @@ void remove_arquivo(Lista disco, char* nome){
 	}
 }
 void mescla(Lista disco, No * p){
-	if(!(p->dir->ocupado) /*&& (p->dir != disco->esq)*/){
+	if(!(p->dir->ocupado) && (p->dir != disco->esq)){
 		p->tam += p->dir->tam;
 		removeNo(disco, p->dir);
 	}

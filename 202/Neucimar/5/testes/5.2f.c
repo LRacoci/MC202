@@ -13,41 +13,49 @@
 #define MAX_NOME 11
 #define MAX_DISCO 8
 
-/* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
+
 typedef enum bool{false, true} bool;
 
+/* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
 typedef struct lista { 
 	char *nome;
 	int tam;
 	bool ocupado;
 	struct lista *esq, *dir;
-} No, *Lista, **Head;
+} No, Arq, *Lista, *Disco, **Head;
 
 /* TAD: Listas Duplamente Ligadas, Circulares com Nós Cabeças*/
 /************************************************************/
 
 void cria_lista(Head nova_lista, int D);
-void cria_primeiro(Lista ini, char nome[], int tam);
+void cria_ultimo(Lista ini, char nome[], int tam);
 void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag);
+
 void atribui_tam(Lista ini, No* p, int tam);
-void transpB2bA(Lista ini, No* A, No* B);
-void transpB2aA(Lista ini, No* A, No* B);
+void libera_arq(Lista ini, No * p);
 void removeNo(Lista ini, No * A);
 void removeLista(Head h);
-void copia_lista(Lista A, Lista B);
-void picotaLista(Lista A, double parte);
-void picotaNo(Lista A, No* p, double slice);
+bool vazia(Lista ini);
 
+
+/* Útil pra debugar */
 void pLst(Lista ini);
 
 /* TAD: Disco, implementado com Listas Ligadas */
 /**********************************************/
+void copia_disco(Lista A, Lista B);
 void imprime_celula(double P);
-void imprime_disco(Lista ini, int D);
-bool otimiza_disco(Lista disco, int D);
-bool insere(Lista disco, int D, int tam, char* nome);
-void remove_arquivo(Lista disco, char* nome);
-void mescla(Lista disco, No * p);
+void imprime_disco(Disco ini, int D);
+void picotaDisco(Lista A, double parte);
+void picotaArquivo(Lista A, No* p, double slice);
+
+/* Verifica, após inserir um arquivo, se o disco está cheio */
+bool insere_arquivo(Disco disco, int D, int tam, char* nome);
+/* Verifica, após otimizar o disco, se o disco está cheio */
+bool otimiza_disco(Disco disco, int D);
+/* Verifica, após Remover um arquivo, se o disco está cheio */
+void remove_arquivo(Disco disco, char* nome);
+void mescla(Disco disco, No * p);
 
 /* assinatura de outras funções */
 /********************************/
@@ -84,7 +92,7 @@ bool Continua(int N){
 	D = D * Converte_pra_K(unidade);
 	
 	cria_lista(&disco, D);
-	cria_primeiro(disco, "", D);
+	cria_ultimo(disco, "", D);
 	
 	for(i = 0; i < N; i++){
 		scanf("%s", tipo);
@@ -92,7 +100,7 @@ bool Continua(int N){
 			scanf("%s %d%c%c", nome, &tam, &unidade, &lixo);
 			if(!cheio){
 				tam = tam * Converte_pra_K(unidade);
-				cheio = insere(disco, D, tam, nome);
+				cheio = insere_arquivo(disco, D, tam, nome);
 			}
 		}else if(strcmp(tipo, "remove") == 0){
 			scanf("%s", nome);
@@ -101,11 +109,12 @@ bool Continua(int N){
 		}else if(strcmp(tipo, "otimiza") == 0){
 			if(!cheio) 
 				cheio = otimiza_disco(disco, D);
+		/* Além de servir pra debugar, impede o programa de fazer besteira
+		 * caso o usuário seja descuidado */
 		}else{
 			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
-		/*pLst(disco);*/
 	}
 	
 	if(cheio) printf("ERRO: disco cheio\n");
@@ -115,7 +124,7 @@ bool Continua(int N){
 	
 	return true;
 }
-
+/* Converte únidades */
 int Converte_pra_K(char X){
 	switch ((int)(X)) {
 	case ((int)('K')):
@@ -132,6 +141,17 @@ int Converte_pra_K(char X){
 /************************************************/
 /***********************************************/
 
+/* Foi usada pra debugar, salvava o disco original antes de picotar */
+void copia_disco(Lista A, Lista B){
+	No* pB;
+	if(vazia(A)){
+		return;
+	}
+	for(pB = B->dir; pB != B; pB = pB->dir){
+		cria_antes(A, A, pB->nome, pB->tam, pB->ocupado);
+	}
+}
+/* Imprime uma única célula de acordo com as especificações do enunciado */
 void imprime_celula(double P){
 	P *= 100;
 	if ((75 < P) && (P <= 100)) 
@@ -141,18 +161,14 @@ void imprime_celula(double P){
 	else if((0 <= P) && (P <= 25)) 
 		printf("[#]");
 }
-void imprime_disco(Lista ini, int D){
+/* Picota a lista em tamanhos fixos, estratégicos para imprimir 8 células */
+void imprime_disco(Disco ini, int D){
 	double parte = D/8.0;
 	double jl = 0, livres = 0;
-	No* p;
-	Lista aux;
-	/*pLst(ini);*/
-	cria_lista(&aux, D);
-	copia_lista(aux, ini);
-	picotaLista(aux, parte);
-	/*pLst(aux);*/
+	Arq* p;
+	picotaDisco(ini, parte);
 	
-	for(p = aux->dir; p != aux; p = p->dir){
+	for(p = ini->dir; p != ini; p = p->dir){
 		jl += p->tam;
 		if(p->ocupado == false){
 			livres += p->tam;
@@ -165,25 +181,37 @@ void imprime_disco(Lista ini, int D){
 	}
 	
 	printf("\n");
-	
-	removeLista(&aux);
-
 }
-bool otimiza_disco(Lista disco, int D){
-	No* p;
-	for(p = disco->dir; p != disco; p = p->dir){
-		if(p->ocupado == false){
-			removeNo(disco, p);
+/* Picota os arquivos do disco de forma a fascilitar a impressão */
+void picotaDisco(Disco A, double parte){
+	double jl = 0;
+	Arq *p;
+	for(p = A->dir; p != A;){
+		jl += p->tam;	
+		if(jl < parte && jl + p->dir->tam > parte){
+			p = p->dir;
+			if(p != A) picotaArquivo(A, p, parte - jl);
+			jl = 0;
+		}else if(jl > parte){
+			jl -= p->tam;
+			picotaArquivo(A, p, parte - jl);
+			jl = 0;
+		}else{
+			p = p->dir;
 		}
 	}
-	if(disco->tam < 0) return true;
-	
-	cria_primeiro(disco, "", disco->tam);
-	
-	return false;
 }
-bool insere(Lista disco, int D, int tam, char* nome){
-	No *p, *menorlivre;
+/* Divide um arquivo em duas partes, a primeira de tamanho slice */
+void picotaArquivo(Disco A, Arq * p, double slice){
+	if(p->tam <= slice || slice <= 0){
+		return;
+	}
+	cria_antes(A, p, p->nome, slice, p->ocupado);
+	atribui_tam(A, p, p->tam - slice);
+}
+/* Insere na prmeira menor posição livre, otimiza se necessário */
+bool insere_arquivo(Disco disco, int D, int tam, char* nome){
+	Arq *p, *menorlivre;
 	bool tem_menor_livre = false;
 
 	/* Serve apenas para inicializar menorlivre */
@@ -207,7 +235,6 @@ bool insere(Lista disco, int D, int tam, char* nome){
 		p = menorlivre;
 		/* O arquivo é inserido */
 		atribui_tam(disco, p, p->tam - tam);
-
 		
 		cria_antes(disco, p, nome, tam, true);
 		
@@ -218,9 +245,9 @@ bool insere(Lista disco, int D, int tam, char* nome){
 		/* ... e o disco não está cheio */
 		return false;
 	}
-	/* Se a função continua executando, nenhuma posição foi encontrada/
-	 * então o disco deve ser otimizado, se essa função retornar disco
-	 * cheio, essa informação é repassada para o retorno de insere*/
+	/* Se a função continua executando, nenhuma posição foi encontrada então
+	 * o disco deve ser otimizado, se essa função retornar disco cheio, 
+	 * essa informação é repassada para o retorno de insere_arquivo */
 	if(otimiza_disco(disco, D))
 		return true;
 	
@@ -243,33 +270,49 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	}else return true;
 	return false;
 }
-void remove_arquivo(Lista disco, char* nome){
-	No* p;
+/* Remove nós livres e, no final, insere um livre com o tamnho livre total */
+bool otimiza_disco(Disco disco, int D){
+	Arq* p;
+	for(p = disco->dir; p != disco; p = p->dir){
+		if(p->ocupado == false){
+			removeNo(disco, p);
+		}
+	}
+	if(disco->tam < 0) return true;
+	
+	cria_ultimo(disco, "", disco->tam);
+	
+	return false;
+}
+/* Libera arquivos ainda não liberados e mescla com adjacentes livres */
+void remove_arquivo(Disco disco, char* nome){
+	Arq* p;
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado && strcmp(nome, p->nome) == 0){
-			p->ocupado = false;
-			disco->tam += p->tam;
+			libera_arq(disco, p);
+			
+			/* Mescla com adjacentes livres */
 			mescla(disco, p);
 			return;
 		}
 	}
 }
-void mescla(Lista disco, No * p){
-	if(!(p->dir->ocupado) /*&& (p->dir != disco->esq)*/){
-		p->tam += p->dir->tam;
+/* Mescla nós adjacentes livres e mantém o nome do nó central */
+void mescla(Disco disco, Arq * p){
+	if(!(p->dir->ocupado)){
+		atribui_tam(disco, p, p->tam + p->dir->tam);
 		removeNo(disco, p->dir);
 	}
 	if(!(p->esq->ocupado) && (p->esq != disco)){
-		p->tam += p->esq->tam;
+		atribui_tam(disco, p, p->tam + p->esq->tam);
 		removeNo(disco, p->esq);
 	}
 }
 
-/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
-/*****************************************/
-/****************************************/
 
-/* TAD de Listas Duplamente Ligadas, Circulares com Nós Cabeças */
+
+/* TAD de Listas Duplamente Ligadas, Circulares com Nós Cabeças  */ 
+/****************************************************************/
 /***************************************************************/
 
 /* Cria o nó cabeça */
@@ -279,6 +322,7 @@ void cria_lista(Head nova_lista, int D){
 	(*nova_lista)->nome = (char*)malloc(10 * sizeof(char));
 	(*nova_lista)->nome = strcpy((*nova_lista)->nome, "Head");
 
+	/* No inicio o disco está todo livre */
 	(*nova_lista)->tam = D;
 	(*nova_lista)->ocupado = true;
 
@@ -286,26 +330,17 @@ void cria_lista(Head nova_lista, int D){
 	(*nova_lista)->esq = *nova_lista;
 }
 /* Cria um nó e o insere no final da lista, antes do no cabeça */
-void cria_primeiro(Lista ini, char nome[], int tam){
-	No* novo;
-	novo = (No*)malloc(sizeof(No));
-	
-	novo->tam = tam;
-	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
-	novo->nome = strcpy(novo->nome, nome);
-	novo->ocupado = false;
-
-	novo->dir = ini;
-	novo->esq = ini->esq;
-	ini->esq = novo;
-	novo->esq->dir = novo;
+void cria_ultimo(Lista ini, char nome[], int tam){
+	if(tam != 0) cria_antes(ini, ini, nome, tam, false);
 }
-/* Cria nó e o insere antes de P */
+/* Cria nó e o insere antes de P, até quando P é o nó cabeça */
 void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
 	
 	novo->tam = tam;
+	/* Conforme explicado na função atribui, o tamnho livre só é contabilizado
+	 * com base nos nós ocupados */
 	if(flag == true) ini->tam -= tam;
 
 	novo->nome = (char*)malloc(MAX_NOME * sizeof(char));
@@ -313,30 +348,47 @@ void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 
 	novo->ocupado = flag;
 
-
 	novo->dir = P;
 	novo->esq = P->esq;
 	P->esq = novo;
 	novo->esq->dir = novo;
 }
+
+/* Atribui um tamanho e modifica o tamanho livre do disco usando o tamanho de 
+ * nós ocupados como base, o que permite guardar o tamanho livre no nó cabeça
+ * mesmo que não haja nenhum nó livre no disco, o que é muito útil pra decidir
+ * se o disco está cheio ou não e para otimizar */
 void atribui_tam(Lista ini, No* p, int tam){
+	/* Só modifica o tamnho livre quando um nó ocupado é modificado */
 	if (p->ocupado) {
 		ini->tam += p->tam;
 		p->tam = tam;
 		ini->tam -= p->tam;
+	/* Apesar dessa atribuição parecer irresponsável, os cuidados para manter
+	 * os tamanhos de nós livres coerentes é tomado externamente a essa função
+	 * garantindo sempre que a soma total dos tamnhos de nos livres seja igual
+	 * a do nó cabeça, com excessão da função otimização */
 	}else{
 		p->tam = tam;
 	}
 }
+/* Libera um arquivo sem remover o nó */
+void libera_arq(Lista ini, No * p){
+	if(p->ocupado){
+		p->ocupado = false;
+		ini->tam += p->tam;
+	}
+}
 /* Remove o nó na posição A */
 void removeNo(Lista ini, No * A){
-	
 	if(A == ini)
 		return;
-
+	/* No caso contrário nada é feito porque o 
+	 * tamnho dos nós livres não é contabilizado */
 	if(A->ocupado){
-		ini->tam += A->tam;
+		libera_arq(ini, A);
 	}
+
 	free(A->nome);
 
 	A->dir->esq = A->esq;
@@ -345,54 +397,27 @@ void removeNo(Lista ini, No * A){
 }
 /* Desaloca uma lista inteira */
 void removeLista(Head h){
-	/* (*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça */
+	/* (*h)->dir é a primeira posição já que (*h) aponta para o no cabeça */
 	Lista temp, p = (*h)->dir;
+	/* Percorre toda a lista até o nó cabeça */
 	while(p != (*h)){
 		temp = p;
 		p = p->dir;
+		/* Desolaca a memória alocada pra string e o nó*/
 		free(temp->nome);
 		free(temp);
 	}
+	/* Desolaca a memória alocada pra string e o nó cabeça */
+	free(p->nome);
 	free(p);
 	*h = NULL;
 }
-
-void copia_lista(Lista A, Lista B){
-	No* pB;
-	if(A->dir != A || A->esq != A){
-		return;
-	}
-	for(pB = B->dir; pB != B; pB = pB->dir){
-		cria_antes(A, A, pB->nome, pB->tam, pB->ocupado);
-	}
+/* Verifica se a lista está vazia */
+bool vazia(Lista ini) {
+	
+	return ((ini) && (ini->esq == ini) && (ini->dir == ini));
 }
-void picotaLista(Lista A, double parte){
-	double jl = 0;
-	No *p;
-	for(p = A->dir; p != A;){
-		jl += p->tam;	
-		if(jl < parte && jl + p->dir->tam > parte){
-			p = p->dir;
-			picotaNo(A, p, parte - jl);
-			jl = 0;
-		}else if(jl > parte){
-			jl -= p->tam;
-			picotaNo(A, p, parte - jl);
-			
-			jl = 0;
-		}else{
-			p = p->dir;
-		}
-
-	}
-}
-void picotaNo(Lista A, No* p, double slice){
-	if(p->tam <= slice || slice <= 0){
-		return;
-	}
-	cria_antes(A, p, p->nome, slice, p->ocupado);
-	atribui_tam(A, p, p->tam - slice);
-}
+/* Útil pra debugar */
 void pLst(Lista ini){
 	No* p;
 	

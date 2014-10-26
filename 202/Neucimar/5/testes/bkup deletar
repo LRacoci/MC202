@@ -1,19 +1,19 @@
 /* Nome: Lucas Alves Racoci
  * RA: 156331 
- * Laboratorio 05 - Gerente do Espaço */
+ * Laboratorio 05 - Gerente do EspaÃ§o */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-/* STRUCS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
+/* STRUCS, DEFINIÃ‡Ã•ES E CABEÃ‡ALHOS DAS MINHAS FUNÃ‡Ã•ES DA TAD */
 /*************************************************************/
 
 #define MAX_TIPO 8
 #define MAX_NOME 11
 #define MAX_DISCO 8
 
-/* Lista Duplamente Ligada, com Nó Cabeça e Circular*/
+/* Lista Duplamente Ligada, com NÃ³ CabeÃ§a e Circular*/
 typedef enum bool{false, true} bool;
 
 typedef struct lista { 
@@ -23,7 +23,7 @@ typedef struct lista {
 	struct lista *esq, *dir;
 } No, *Lista, **Head;
 
-/* TAD: Listas Duplamente Ligadas, Circulares com Nós Cabeças*/
+/* TAD: Listas Duplamente Ligadas, Circulares com NÃ³s CabeÃ§as*/
 /************************************************************/
 
 void cria_lista(Head nova_lista, int D);
@@ -49,7 +49,7 @@ bool insere(Lista disco, int D, int tam, char* nome);
 void remove_arquivo(Lista disco, char* nome);
 void mescla(Lista disco, No * p);
 
-/* assinatura de outras funções */
+/* assinatura de outras funÃ§Ãµes */
 /********************************/
 int Converte_pra_K(char X);
 bool Continua(int N);
@@ -66,7 +66,7 @@ int main() {
 
 	return 0; 
 } 
-/* implementação de outras funções */
+/* implementaÃ§Ã£o de outras funÃ§Ãµes */
 /**********************************/
 /*********************************/
 
@@ -102,7 +102,7 @@ bool Continua(int N){
 			if(!cheio) 
 				cheio = otimiza_disco(disco, D);
 		}else{
-			printf("\033[91mERRO: Operaçao desconhecida: %s\033[97m\n", tipo);
+			printf("\033[91mERRO: OperaÃ§ao desconhecida: %s\033[97m\n", tipo);
 			exit(1);
 		}
 		/*pLst(disco);*/
@@ -188,14 +188,14 @@ bool insere(Lista disco, int D, int tam, char* nome){
 
 	/* Serve apenas para inicializar menorlivre */
 	Lista aux = (Lista)malloc(sizeof(No));
-	/* Pra garantir que mesmo que o tamanho da menor partição 
-	 * seja D a função insira nessa partição*/
+	/* Pra garantir que mesmo que o tamanho da menor partiÃ§Ã£o 
+	 * seja D a funÃ§Ã£o insira nessa partiÃ§Ã£o*/
 	aux->tam = D*2;
 	menorlivre = aux;
 
 	if(disco->tam < tam) return true;
 
-	/* Acha a posição com menor espaço livre, se tiver */
+	/* Acha a posiÃ§Ã£o com menor espaÃ§o livre, se tiver */
 	for(p = disco->dir; p != disco; p = p->dir){
 		if(p->ocupado == false && p->tam < menorlivre->tam && p->tam >= tam){
 			menorlivre = p;	
@@ -205,41 +205,35 @@ bool insere(Lista disco, int D, int tam, char* nome){
 	/* Se algum menor livre foi achado */
 	if(tem_menor_livre){
 		p = menorlivre;
-		/* O arquivo é inserido */
+		/* O arquivo Ã© inserido */
 		atribui_tam(disco, p, p->tam - tam);
-
-		
+		/* Se a atribuiÃ§Ã£o zerou p->tam, o nÃ³ pode ser removido */
 		cria_antes(disco, p, nome, tam, true);
-		
-		/* Se a atribuição zerou p->tam, o nó pode ser removido */
 		if(p->tam == 0)
 			removeNo(disco, p);
-
-		/* ... e o disco não está cheio */
+		/* ... e o disco nÃ£o estÃ¡ cheio */
 		return false;
 	}
-	/* Se a função continua executando, nenhuma posição foi encontrada/
-	 * então o disco deve ser otimizado, se essa função retornar disco
-	 * cheio, essa informação é repassada para o retorno de insere*/
+	/* Se a funÃ§Ã£o continua executando, nenhuma posiÃ§Ã£o foi encontrada/
+	 * entÃ£o o disco deve ser otimizado, se essa funÃ§Ã£o retornar disco
+	 * cheio, essa informaÃ§Ã£o Ã© repassada para o retorno de insere*/
 	if(otimiza_disco(disco, D))
 		return true;
 	
-	/* Se a função continua executando a otimização teve sucesso
-	 * então p é posicionado na ultima posição do disco */
+	/* Se a funÃ§Ã£o continua executando a otimizaÃ§Ã£o teve sucesso
+	 * entÃ£o p Ã© posicionado na ultima posiÃ§Ã£o do disco */
 	p = disco->esq;
-	/* Se nessa posição o arquivo a ser inserido couber... */
+	/* Se nessa posiÃ§Ã£o o arquivo a ser inserido couber... */
 	if(p->ocupado == false && tam <= p->tam){
-		/* ... o arquivo é inserido ... */
+		/* ... o arquivo Ã© inserido ... */
 		atribui_tam(disco, p, p->tam - tam);
-		
+		/* Se a atribuiÃ§Ã£o zerou p->tam, o nÃ³ pode ser removido */
 		cria_antes(disco, p, nome, tam, true);
-		
-		/* Se a atribuição zerou p->tam, o nó pode ser removido */
 		if(p->tam == 0)
 			removeNo(disco, p);
-		/* ... e o disco não está cheio */
+		/* ... e o disco nÃ£o estÃ¡ cheio */
 		return false;
-	/* Caso o arquivo não caiba, o disco está cheio */
+	/* Caso o arquivo nÃ£o caiba, o disco estÃ¡ cheio */
 	}else return true;
 	return false;
 }
@@ -255,7 +249,7 @@ void remove_arquivo(Lista disco, char* nome){
 	}
 }
 void mescla(Lista disco, No * p){
-	if(!(p->dir->ocupado) /*&& (p->dir != disco->esq)*/){
+	if(!(p->dir->ocupado) && (p->dir != disco->esq)){
 		p->tam += p->dir->tam;
 		removeNo(disco, p->dir);
 	}
@@ -265,14 +259,14 @@ void mescla(Lista disco, No * p){
 	}
 }
 
-/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
+/* IMPLEMENTAÃ‡ÃƒO DAS FUNÃ‡Ã•ES DE MINHA TAD */ 
 /*****************************************/
 /****************************************/
 
-/* TAD de Listas Duplamente Ligadas, Circulares com Nós Cabeças */
+/* TAD de Listas Duplamente Ligadas, Circulares com NÃ³s CabeÃ§as */
 /***************************************************************/
 
-/* Cria o nó cabeça */
+/* Cria o nÃ³ cabeÃ§a */
 void cria_lista(Head nova_lista, int D){
 	*nova_lista = (Lista)malloc(sizeof(No));
 	
@@ -285,7 +279,7 @@ void cria_lista(Head nova_lista, int D){
 	(*nova_lista)->dir = *nova_lista;
 	(*nova_lista)->esq = *nova_lista;
 }
-/* Cria um nó e o insere no final da lista, antes do no cabeça */
+/* Cria um nÃ³ e o insere no final da lista, antes do no cabeÃ§a */
 void cria_primeiro(Lista ini, char nome[], int tam){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
@@ -300,7 +294,7 @@ void cria_primeiro(Lista ini, char nome[], int tam){
 	ini->esq = novo;
 	novo->esq->dir = novo;
 }
-/* Cria nó e o insere antes de P */
+/* Cria nÃ³ e o insere antes de P */
 void cria_antes(Lista ini, No* P, char nome[], int tam, bool flag){
 	No* novo;
 	novo = (No*)malloc(sizeof(No));
@@ -328,7 +322,7 @@ void atribui_tam(Lista ini, No* p, int tam){
 		p->tam = tam;
 	}
 }
-/* Remove o nó na posição A */
+/* Remove o nÃ³ na posiÃ§Ã£o A */
 void removeNo(Lista ini, No * A){
 	
 	if(A == ini)
@@ -345,7 +339,7 @@ void removeNo(Lista ini, No * A){
 }
 /* Desaloca uma lista inteira */
 void removeLista(Head h){
-	/* (*h)->dir é a primeira posição jdá que (*h) aponta para o no cabeça */
+	/* (*h)->dir Ã© a primeira posiÃ§Ã£o jdÃ¡ que (*h) aponta para o no cabeÃ§a */
 	Lista temp, p = (*h)->dir;
 	while(p != (*h)){
 		temp = p;
