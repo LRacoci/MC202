@@ -35,13 +35,18 @@ int main() {
 	Arvore A = NULL;
 	scanf("%d", &C);
 	for (i = 0; i < C; i++){
+		/* Le o tamnho das strings */
 		scanf("%d", &N);
 		pre = (char*) malloc((N + 1) * sizeof(char));
 		in  = (char*) malloc((N + 1) * sizeof(char));
+		/* Le as duas strings */
 		scanf ("%s %s\n", pre, in);
+		/* Monta a árvore recursivamente */
 		A = monta_arvore(pre, 0, in, 0, N);
 		free(pre); free(in);
+		/* Imprime em pós-ordem */
 		imprime_pos(A);
+		/* Desaloca tudo que foi alocado */
 		liberaArvore(A);
 		printf("\n");
 	}
