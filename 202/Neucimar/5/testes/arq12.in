@@ -1,0 +1,9 @@
+5 
+8Kb
+insere arq01 1Kb
+insere arq02 1Kb
+remove arq01
+insere arq01 2Kb
+remove arq01
+0
+

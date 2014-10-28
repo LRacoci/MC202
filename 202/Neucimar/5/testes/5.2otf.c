@@ -291,8 +291,10 @@ bool insere_arquivo(Disco disco, int D, int tam, char* nome){
 }
 /* Remove nós livres e, no final, insere um livre com o tamnho livre total */
 bool otimiza_disco(Disco disco, int D){
-	Arq* p;
-	for(p = disco->dir; p != disco; p = p->dir){
+	/* tmp guarda p->dir, porque as vezes p é removido */
+	Arq *p, *tmp;
+	for(p = disco->dir; p != disco; p = tmp){
+		tmp = p->dir;
 		if(p->ocupado == false){
 			removeNo(disco, p);
 		}
