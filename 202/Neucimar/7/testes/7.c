@@ -50,7 +50,9 @@ int main() {
 	for(i = 0; i < n; i++){
 		set[i].tam = 0;
 		set[i].elem = NULL;
-		while(scanf("%d", &atual)){
+		while(getchar() != '\n'){
+			ungetchar();
+			scanf("%d", &atual);
 			insere(&(set[i].elem), atual);
 			set[i].tam++;
 			if(set[i].tam > u){
