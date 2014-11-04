@@ -24,10 +24,11 @@ typedef struct Subset{
 /* TAD: Arvore Binária de Busca por Afunilamento */
 /************************************************/
 
-void insere(Arvore * Raiz, int chave);
-void remove(Arvore * Raiz, int chave);
-void rotacao(char tipo, Arvore filho);
-
+bool insere(Arvore * Raiz, int chave);
+bool insere_arv_bin(Arvore * Raiz, int chave);
+void removE_arv_bin(Arvore * Raiz, int chave);
+void afunila(NoArvBin * f);
+void rotacao(Arvore f);
 
 /* MEU PROGRAMA - MAIN */
 /**********************/
@@ -50,10 +51,10 @@ int main() {
 		set[i].tam = 0;
 		set[i].elem = NULL;
 		while(scanf("%d", &atual)){
-			insere(&(set[i].elem), atual, false);
+			insere(&(set[i].elem), atual);
 			set[i].tam++;
 			if(set[i].tam > u){
-				printf("\033[91mERRO\033[97m\n")
+				printf("\033[91mERRO\033[97m\n");
 				exit(1);
 			}
 		}
@@ -67,9 +68,10 @@ int main() {
 /****************************************/
 /***************************************/
 
-insere(Arvore * Raiz, int chave){
-	insere_arv_bin(Raiz, chave);
-	afunila(Raiz);
+bool insere(Arvore * Raiz, int chave){
+	bool inserivel = insere_arv_bin(Raiz, chave);
+	if(inserivel) afunila(Raiz);
+	return inserivel
 }
 
 bool insere_arv_bin(Arvore * Raiz, int chave){
@@ -80,10 +82,10 @@ bool insere_arv_bin(Arvore * Raiz, int chave){
 		(*Raiz)->dir = NULL;
 		(*Raiz)->pai = NULL;
 	}
-	else if(chave == (*Raiz)->chave){
+	else if(chave == (*Raiz)->info){
 		return false;
 	}
-	else if(chave < (*Raiz)->chave){
+	else if(chave < (*Raiz)->info){
 		insere_arv_bin(&(*Raiz)->esq, chave);
 		(*Raiz)->esq->pai = (*Raiz);
 	}else{
@@ -92,7 +94,7 @@ bool insere_arv_bin(Arvore * Raiz, int chave){
 	}
 	return true;
 }
-void remove(Arvore * Raiz, int chave){
+void removE_arv_bin(Arvore * Raiz, int chave){
 	
 }
 void afunila(NoArvBin * f){
