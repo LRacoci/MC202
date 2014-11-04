@@ -1,0 +1,1048 @@
+desc: (none)
+cmd: ./5.2otf
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=129468
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=2
+#-----------
+time=129636
+mem_heap_B=85
+mem_heap_extra_B=43
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=133571
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=4
+#-----------
+time=134609
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=detailed
+n5: 117 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x401247: cria_antes (5.2otf.c:361)
+  n1: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 11 0x401278: cria_antes (5.2otf.c:368)
+  n1: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=5
+#-----------
+time=134726
+mem_heap_B=128
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=6
+#-----------
+time=136606
+mem_heap_B=160
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=136804
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=138734
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=138942
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=141991
+mem_heap_B=246
+mem_heap_extra_B=114
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=142186
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=142302
+mem_heap_B=160
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=142452
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=14
+#-----------
+time=142639
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=147671
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=detailed
+n5: 203 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 128 0x401247: cria_antes (5.2otf.c:361)
+  n1: 64 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 64 0x400960: Continua (5.2otf.c:106)
+    n0: 64 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x400EEE: insere_arquivo (5.2otf.c:269)
+     n1: 32 0x400960: Continua (5.2otf.c:106)
+      n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n1: 32 0x400F5B: insere_arquivo (5.2otf.c:279)
+   n1: 32 0x400960: Continua (5.2otf.c:106)
+    n0: 32 0x400846: main (5.2otf.c:73)
+ n3: 33 0x401278: cria_antes (5.2otf.c:368)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x400EEE: insere_arquivo (5.2otf.c:269)
+     n1: 11 0x400960: Continua (5.2otf.c:106)
+      n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n1: 11 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 11 0x400960: Continua (5.2otf.c:106)
+    n0: 11 0x400846: main (5.2otf.c:73)
+  n1: 11 0x400F5B: insere_arquivo (5.2otf.c:279)
+   n1: 11 0x400960: Continua (5.2otf.c:106)
+    n0: 11 0x400846: main (5.2otf.c:73)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=16
+#-----------
+time=147815
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=147985
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=149499
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=detailed
+n5: 32 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 0 0x401183: cria_lista (5.2otf.c:344)
+  n1: 0 0x4008B9: Continua (5.2otf.c:94)
+   n0: 0 0x400846: main (5.2otf.c:73)
+ n3: 0 0x401247: cria_antes (5.2otf.c:361)
+  n2: 0 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 0 0x4008CD: Continua (5.2otf.c:95)
+    n0: 0 0x400846: main (5.2otf.c:73)
+   n1: 0 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 0 0x400EEE: insere_arquivo (5.2otf.c:269)
+     n1: 0 0x400960: Continua (5.2otf.c:106)
+      n0: 0 0x400846: main (5.2otf.c:73)
+  n1: 0 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 0 0x400960: Continua (5.2otf.c:106)
+    n0: 0 0x400846: main (5.2otf.c:73)
+  n1: 0 0x400F5B: insere_arquivo (5.2otf.c:279)
+   n1: 0 0x400960: Continua (5.2otf.c:106)
+    n0: 0 0x400846: main (5.2otf.c:73)
+ n3: 0 0x401278: cria_antes (5.2otf.c:368)
+  n2: 0 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 0 0x4008CD: Continua (5.2otf.c:95)
+    n0: 0 0x400846: main (5.2otf.c:73)
+   n1: 0 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 0 0x400EEE: insere_arquivo (5.2otf.c:269)
+     n1: 0 0x400960: Continua (5.2otf.c:106)
+      n0: 0 0x400846: main (5.2otf.c:73)
+  n1: 0 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 0 0x400960: Continua (5.2otf.c:106)
+    n0: 0 0x400846: main (5.2otf.c:73)
+  n1: 0 0x400F5B: insere_arquivo (5.2otf.c:279)
+   n1: 0 0x400960: Continua (5.2otf.c:106)
+    n0: 0 0x400846: main (5.2otf.c:73)
+ n1: 0 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 0 0x400960: Continua (5.2otf.c:106)
+   n0: 0 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=19
+#-----------
+time=149667
+mem_heap_B=85
+mem_heap_extra_B=43
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=20
+#-----------
+time=151588
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=151776
+mem_heap_B=128
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=153656
+mem_heap_B=160
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=153854
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=24
+#-----------
+time=155784
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=25
+#-----------
+time=155875
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=26
+#-----------
+time=155992
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=27
+#-----------
+time=160443
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=160587
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=detailed
+n5: 117 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 64 0x401247: cria_antes (5.2otf.c:361)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n1: 32 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 32 0x400960: Continua (5.2otf.c:106)
+    n0: 32 0x400846: main (5.2otf.c:73)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n2: 11 0x401278: cria_antes (5.2otf.c:368)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=29
+#-----------
+time=160757
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=30
+#-----------
+time=162371
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=31
+#-----------
+time=162539
+mem_heap_B=85
+mem_heap_extra_B=43
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=32
+#-----------
+time=164462
+mem_heap_B=117
+mem_heap_extra_B=51
+mem_stacks_B=0
+heap_tree=detailed
+n5: 117 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n2: 32 0x401247: cria_antes (5.2otf.c:361)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n2: 11 0x401278: cria_antes (5.2otf.c:368)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 2 places, all below massif's threshold (01.00%)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=33
+#-----------
+time=164650
+mem_heap_B=128
+mem_heap_extra_B=64
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=166486
+mem_heap_B=160
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=166684
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=168566
+mem_heap_B=203
+mem_heap_extra_B=93
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=168657
+mem_heap_B=171
+mem_heap_extra_B=85
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=38
+#-----------
+time=168774
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=170656
+mem_heap_B=246
+mem_heap_extra_B=114
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=170757
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=170874
+mem_heap_B=257
+mem_heap_extra_B=127
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=172710
+mem_heap_B=289
+mem_heap_extra_B=135
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=172821
+mem_heap_B=289
+mem_heap_extra_B=135
+mem_stacks_B=0
+heap_tree=detailed
+n5: 289 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 160 0x401247: cria_antes (5.2otf.c:361)
+  n1: 128 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 128 0x400960: Continua (5.2otf.c:106)
+    n0: 128 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 55 0x401278: cria_antes (5.2otf.c:368)
+  n1: 44 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 44 0x400960: Continua (5.2otf.c:106)
+    n0: 44 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=44
+#-----------
+time=172938
+mem_heap_B=300
+mem_heap_extra_B=148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=45
+#-----------
+time=174870
+mem_heap_B=332
+mem_heap_extra_B=156
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=174991
+mem_heap_B=332
+mem_heap_extra_B=156
+mem_stacks_B=0
+heap_tree=detailed
+n5: 332 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 192 0x401247: cria_antes (5.2otf.c:361)
+  n1: 160 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 160 0x400960: Continua (5.2otf.c:106)
+    n0: 160 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 66 0x401278: cria_antes (5.2otf.c:368)
+  n1: 55 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 55 0x400960: Continua (5.2otf.c:106)
+    n0: 55 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=47
+#-----------
+time=175108
+mem_heap_B=343
+mem_heap_extra_B=169
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=48
+#-----------
+time=177597
+mem_heap_B=343
+mem_heap_extra_B=169
+mem_stacks_B=0
+heap_tree=detailed
+n5: 343 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 224 0x401247: cria_antes (5.2otf.c:361)
+  n1: 192 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 192 0x400960: Continua (5.2otf.c:106)
+    n0: 192 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 32 0x4008CD: Continua (5.2otf.c:95)
+    n0: 32 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 77 0x401278: cria_antes (5.2otf.c:368)
+  n1: 66 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 66 0x400960: Continua (5.2otf.c:106)
+    n0: 66 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n1: 11 0x4008CD: Continua (5.2otf.c:95)
+    n0: 11 0x400846: main (5.2otf.c:73)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=49
+#-----------
+time=177638
+mem_heap_B=300
+mem_heap_extra_B=148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=178360
+mem_heap_B=289
+mem_heap_extra_B=135
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=178500
+mem_heap_B=246
+mem_heap_extra_B=114
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=52
+#-----------
+time=178611
+mem_heap_B=246
+mem_heap_extra_B=114
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=180527
+mem_heap_B=289
+mem_heap_extra_B=135
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=180638
+mem_heap_B=257
+mem_heap_extra_B=127
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=180755
+mem_heap_B=300
+mem_heap_extra_B=148
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=56
+#-----------
+time=182591
+mem_heap_B=332
+mem_heap_extra_B=156
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=182712
+mem_heap_B=300
+mem_heap_extra_B=148
+mem_stacks_B=0
+heap_tree=detailed
+n5: 300 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 192 0x401247: cria_antes (5.2otf.c:361)
+  n1: 160 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 160 0x400960: Continua (5.2otf.c:106)
+    n0: 160 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 66 0x401278: cria_antes (5.2otf.c:368)
+  n1: 55 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 55 0x400960: Continua (5.2otf.c:106)
+    n0: 55 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=58
+#-----------
+time=182829
+mem_heap_B=343
+mem_heap_extra_B=169
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=184761
+mem_heap_B=375
+mem_heap_extra_B=177
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=184892
+mem_heap_B=375
+mem_heap_extra_B=177
+mem_stacks_B=0
+heap_tree=detailed
+n5: 375 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 224 0x401247: cria_antes (5.2otf.c:361)
+  n1: 192 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 192 0x400960: Continua (5.2otf.c:106)
+    n0: 192 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 77 0x401278: cria_antes (5.2otf.c:368)
+  n1: 66 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 66 0x400960: Continua (5.2otf.c:106)
+    n0: 66 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=61
+#-----------
+time=185009
+mem_heap_B=386
+mem_heap_extra_B=190
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=186867
+mem_heap_B=418
+mem_heap_extra_B=198
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=63
+#-----------
+time=187008
+mem_heap_B=418
+mem_heap_extra_B=198
+mem_stacks_B=0
+heap_tree=detailed
+n5: 418 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 256 0x401247: cria_antes (5.2otf.c:361)
+  n1: 224 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 224 0x400960: Continua (5.2otf.c:106)
+    n0: 224 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 88 0x401278: cria_antes (5.2otf.c:368)
+  n1: 77 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 77 0x400960: Continua (5.2otf.c:106)
+    n0: 77 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=64
+#-----------
+time=187125
+mem_heap_B=429
+mem_heap_extra_B=211
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=189080
+mem_heap_B=461
+mem_heap_extra_B=219
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=189231
+mem_heap_B=461
+mem_heap_extra_B=219
+mem_stacks_B=0
+heap_tree=detailed
+n5: 461 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 288 0x401247: cria_antes (5.2otf.c:361)
+  n1: 256 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 256 0x400960: Continua (5.2otf.c:106)
+    n0: 256 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 99 0x401278: cria_antes (5.2otf.c:368)
+  n1: 88 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 88 0x400960: Continua (5.2otf.c:106)
+    n0: 88 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=67
+#-----------
+time=189348
+mem_heap_B=472
+mem_heap_extra_B=232
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=191207
+mem_heap_B=504
+mem_heap_extra_B=240
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=191368
+mem_heap_B=504
+mem_heap_extra_B=240
+mem_stacks_B=0
+heap_tree=detailed
+n5: 504 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 320 0x401247: cria_antes (5.2otf.c:361)
+  n1: 288 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 288 0x400960: Continua (5.2otf.c:106)
+    n0: 288 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 110 0x401278: cria_antes (5.2otf.c:368)
+  n1: 99 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 99 0x400960: Continua (5.2otf.c:106)
+    n0: 99 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 32 0x400DEA: insere_arquivo (5.2otf.c:238)
+  n1: 32 0x400960: Continua (5.2otf.c:106)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+#-----------
+snapshot=70
+#-----------
+time=191485
+mem_heap_B=515
+mem_heap_extra_B=253
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=195575
+mem_heap_B=515
+mem_heap_extra_B=253
+mem_stacks_B=0
+heap_tree=peak
+n5: 515 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n3: 352 0x401247: cria_antes (5.2otf.c:361)
+  n1: 320 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 320 0x400960: Continua (5.2otf.c:106)
+    n0: 320 0x400846: main (5.2otf.c:73)
+  n2: 32 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 32 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 32 0x4009DA: Continua (5.2otf.c:114)
+     n0: 32 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n3: 121 0x401278: cria_antes (5.2otf.c:368)
+  n1: 110 0x400EB5: insere_arquivo (5.2otf.c:257)
+   n1: 110 0x400960: Continua (5.2otf.c:106)
+    n0: 110 0x400846: main (5.2otf.c:73)
+  n2: 11 0x401220: cria_ultimo (5.2otf.c:356)
+   n2: 11 0x40100A: otimiza_disco (5.2otf.c:305)
+    n1: 11 0x4009DA: Continua (5.2otf.c:114)
+     n0: 11 0x400846: main (5.2otf.c:73)
+    n0: 0 in 1 place, below massif's threshold (01.00%)
+   n0: 0 in 1 place, below massif's threshold (01.00%)
+  n0: 0 in 1 place, below massif's threshold (01.00%)
+ n1: 32 0x401168: cria_lista (5.2otf.c:342)
+  n1: 32 0x4008B9: Continua (5.2otf.c:94)
+   n0: 32 0x400846: main (5.2otf.c:73)
+ n1: 10 0x401183: cria_lista (5.2otf.c:344)
+  n1: 10 0x4008B9: Continua (5.2otf.c:94)
+   n0: 10 0x400846: main (5.2otf.c:73)
+ n0: 0 in 1 place, below massif's threshold (01.00%)
+#-----------
+snapshot=72
+#-----------
+time=195702
+mem_heap_B=461
+mem_heap_extra_B=219
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=201045
+mem_heap_B=418
+mem_heap_extra_B=198
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=74
+#-----------
+time=201148
+mem_heap_B=343
+mem_heap_extra_B=169
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=201261
+mem_heap_B=289
+mem_heap_extra_B=135
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=201364
+mem_heap_B=214
+mem_heap_extra_B=106
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=77
+#-----------
+time=201477
+mem_heap_B=160
+mem_heap_extra_B=72
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=78
+#-----------
+time=201580
+mem_heap_B=85
+mem_heap_extra_B=43
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=79
+#-----------
+time=201688
+mem_heap_B=32
+mem_heap_extra_B=8
+mem_stacks_B=0
+heap_tree=empty
