@@ -39,6 +39,7 @@ int main() {
 
 	int i;
 	int atual;
+	char c;
 
 	Subset *set;
 
@@ -46,12 +47,12 @@ int main() {
 
 	set = (Subset*)malloc(n * sizeof(Subset));
 
-	scanf("s ");
 	for(i = 0; i < n; i++){
 		set[i].tam = 0;
 		set[i].elem = NULL;
-		while(getchar() != '\n'){
-			ungetchar();
+		scanf("s ");
+		while((c = getchar()) != '\n'){
+			ungetc(c, stdin);
 			scanf("%d", &atual);
 			insere(&(set[i].elem), atual);
 			set[i].tam++;
