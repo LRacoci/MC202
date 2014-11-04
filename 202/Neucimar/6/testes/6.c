@@ -9,7 +9,7 @@
 /* STRUCTS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
 /*************************************************************/
 
-typedef enum bool{false, true, head} bool;
+typedef enum bool{false, true} bool;
 
 typedef struct Arvore{
 	char info;
