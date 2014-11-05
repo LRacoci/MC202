@@ -47,17 +47,16 @@ int main() {
 
 	Subset *set;
 
-	scanf("%d %d", &u, &n);
+	scanf("%d %d\n", &u, &n);
 
 	set = (Subset*)malloc(n * sizeof(Subset));
 
 	for(i = 0; i < n; i++){
 		set[i].tam = 0;
 		set[i].elem = NULL;
-		scanf("\ns");
+		scanf("s");
 		/***************************************************************************/
-		while((c = getchar()) != '\n'){
-			/*ungetc(c, stdin);*/
+		while(scanf("%c", &c) != EOF && c == ' '){
 			scanf("%d", &atual);
 			insere(&(set[i].elem), atual);
 			set[i].tam++;
@@ -70,7 +69,7 @@ int main() {
 		}
 	}
 
-	for(i = 0, i < n, i++)
+	for(i = 0; i < n; i++)
 		liberaArvore(set[i].elem);
 	free(set);
 
