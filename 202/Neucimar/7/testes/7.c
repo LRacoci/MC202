@@ -26,7 +26,8 @@ typedef struct Subset{
 
 bool insere(Arvore * Raiz, int chave);
 bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde);
-void removE_arv_bin(Arvore * Raiz, int chave);
+bool remove_no(Arvore * Raiz, int chave);
+bool remove_arv_bin(Arvore * Raiz, int chave);
 bool afunila(NoArvBin * f);
 void rotacao(Arvore f);
 void liberaArvore(Arvore A);
@@ -112,8 +113,34 @@ bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde){
 	}
 	return true;
 }
-void removE_arv_bin(Arvore * Raiz, int chave){
-	
+bool remove_arv_bin(Arvore * Raiz, int chave){
+	NoArvBin *temp, *aux;
+	if(*Raiz == NULL){
+		return false;
+	}else if (k < (*Raiz)->info){
+		remove_arv_bin(k, &(*Raiz)->esq) ;
+	}else if (k > (*Raiz)->info){
+		remove_arv_bin(k, &(*Raiz)->dir) ;
+	}else { /* remover */
+		temp = *Raiz ;
+		if (temp->dir == NULL){
+			*Raiz = temp->esq ; /* soh tem um filho ? */
+		}else if (temp->esq == NULL) {
+			*Raiz = temp->dir ;
+		/* troca pelo mais a dir da subarvore esq */
+		}else{
+			aux = temp->esq
+			while(temp->esq->dir != NULL){
+				temp->esq = temp->esq->dir;
+			}
+			temp->info = temp->esq->info ;
+			temp = temp->esq ;
+			temp->esq = temp->esq->esq ;
+
+		}
+		free (g) ;
+		}
+	}
 }
 bool afunila(NoArvBin * f){
 	NoArvBin *p, *a;
