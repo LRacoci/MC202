@@ -23,6 +23,7 @@ typedef struct Set{
 
 typedef struct VetInt{
 	int tam;
+	int cobre;
 	int *v;
 } VetInt;
 
@@ -85,6 +86,7 @@ int main() {
 
 	R.v = (int*)malloc(n * sizeof(int));
 	R.tam = 0;
+	R.cobre = true;
 
 	subsets = (Set*)malloc(n * sizeof(Set));
 
@@ -104,7 +106,7 @@ int main() {
 	}
 	
 	for(i = 0; i < n; i++){
-		/*pSet(subsets, n, 'S');*/
+		/*pSet(subsets, n, 'S');************/
 		M_indice = maior(subsets, n);
 		M = subsets[M_indice];
 		if(M_indice == -1) break;
@@ -114,12 +116,12 @@ int main() {
 				complemento(subsets[j], M);
 		}
 		complemento(universe, M);
-		/*pSet(&universe, 1, 'U');*/
+		/*pSet(&universe, 1, 'U');********/
 		R.v[R.tam++] = M_indice + 1;
-		/*imprime_final(R);
-		printf("\n");*/
+		/*imprime_final(R);*******/
+		/*printf("\n");********/
 	}
-
+	R.cobre = universe->tam == 0;
 	imprime_final(R);
 	free(R.v);
 	if(universe){
@@ -167,8 +169,8 @@ void complemento(Set A, Set B){
 	B_elem.tam = 0;
 	salva_elementos_pre_ordem(B->elem, &B_elem);
 	for(i = 0; i < B_elem.tam; i++){
-		/*printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]);
-		pArv(A->elem);*/
+		/*printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]);*******/
+		/*pArv(A->elem);****************/
 		remova(A, B_elem.v[i]);
 	}
 }
@@ -181,7 +183,7 @@ void salva_elementos_pre_ordem(Arvore A, VetInt * A_elem){
 }
 void imprime_final(VetInt R){
 	int i;
-	if(R.tam > 0){
+	if(R.tam > 0 && R.cobre){
 		printf("S%d ",R.v[0]);
 		for(i = 1; i < R.tam; i++){
 			printf("U S%d ",R.v[i]);
@@ -202,6 +204,7 @@ bool insira(Set C, int chave){
 	
 	while(afunila(onde)){
 		C->elem = onde;
+		pSet(&C, 1, 'I');
 	}
 	(C->tam)++;
 	/*rintf("\033[94mI\033[97m: ");
@@ -246,6 +249,7 @@ bool remova(Set C, int chave){
 	
 	while(afunila(onde)){
 		C->elem = onde;
+		pSet(&C, 1, 'R');
 	}
 	C->tam--;
 	
@@ -296,10 +300,16 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 
 	/* Se tem os dois filhos, procura pelo mais a dir da subarvore esq */
 	}else{
+		/* Acha o subs */
 		for((*subs) = alvo->esq; (*subs)->dir != NULL; (*subs) = (*subs)->dir);
 
+		alvo->dir->pai = *subs;
+		alvo->esq->pai = *subs;
+		
+		/* Começa a trocar alvo por subs */
 		(*subs)->dir = alvo->dir;
 
+		/* Atribui subs ao filho (dir ou esq) de pai de alvo, se este existir*/
 		if(alvo->pai){
 			if(alvo->pai->dir == alvo) 
 				alvo->pai->dir = (*subs);
@@ -307,17 +317,21 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 				alvo->pai->esq = (*subs);
 		}
 		
+		/* Se subs é o primeiro a esquerda de alvo */
 		if((*subs) == alvo->esq)
+			/* Atribui */
 			(*subs)->pai->esq = (*subs)->esq;
-		else	
+		/*  */
+		else{	
 			(*subs)->pai->dir = (*subs)->esq;
+			(*subs)->esq = alvo->esq;
+		}
 		
+		/*  */
 		if((*subs)->esq)
 			(*subs)->esq->pai = (*subs)->pai;
 		
 		(*subs)->pai = alvo->pai;
-		(*subs)->esq = alvo->esq;
-		
 	}
 	free(alvo);
 
@@ -368,6 +382,7 @@ void rotacao(NoArvBin * f) {
 		}
 		f->esq->pai = f;
 	}
+
 }
 void liberaArvore(Arvore A){
 	if(A){
