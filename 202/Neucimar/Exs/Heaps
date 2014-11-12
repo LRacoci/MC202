@@ -1,0 +1,35 @@
+/* Nome: Lucas Alves Racoci
+ * RA: 156331 
+ * Laboratorio 07 - Cobertura de Conjuntos */
+
+#include <stdio.h>
+#include <stdlib.h>
+
+/* STRUCTS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
+/*************************************************************/
+
+typedef enum bool{false, true} bool;
+
+typedef struct Tipo{
+	int ID;
+	/*...*/
+} Tipo;
+
+typedef strucs Heap{
+	Tipo v*;
+	int tam;
+} NoHeap, *Heap;
+
+Heap cria_Heap(int tam, Tipo elementos[]){
+	Heap novo;
+	int i;
+	novo = (Heap)malloc(sizeof(NoHeap));
+	novo->v = (Tipo*)malloc(tam * sizeof(Tipo));
+	novo->tam = tam;
+	for(i = 0; i < novo->tam; i++){
+		novo->v[i] = elementos[i];
+	}
+}
+void Desce(Heap h, int tam){
+
+}
