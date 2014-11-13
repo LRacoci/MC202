@@ -23,7 +23,7 @@ typedef struct Set{
 
 typedef struct VetInt{
 	int tam;
-	bool cobre;
+	int cobre;
 	int *v;
 } VetInt;
 
@@ -106,7 +106,7 @@ int main() {
 	}
 	
 	for(i = 0; i < n; i++){
-		pSet(subsets, n, 'S');/** prints1 **/
+		/*pSet(subsets, n, 'S');************/
 		M_indice = maior(subsets, n);
 		M = subsets[M_indice];
 		if(M_indice == -1) break;
@@ -116,13 +116,12 @@ int main() {
 				complemento(subsets[j], M);
 		}
 		complemento(universe, M);
-		pSet(&universe, 1, 'U');/** prints1 **/
+		/*pSet(&universe, 1, 'U');********/
 		R.v[R.tam++] = M_indice + 1;
-		imprime_final(R);/** prints1 **/
-		printf("\n");/** prints1 **/
+		/*imprime_final(R);*******/
+		/*printf("\n");********/
 	}
 	R.cobre = universe->tam == 0;
-
 	imprime_final(R);
 	free(R.v);
 	if(universe){
@@ -159,7 +158,7 @@ int maior(Set *S, int n){
 	for(i = max; i >= 0; i--){
 		if(S[i] && S[max]->tam < S[i]->tam)
 			max = i;
-		printf("\033[94mmax = %d\033[97m\n", max+1);/** prints2 **/
+		printf("\033[94mmax = %d\033[97m\n", max+1);/************/
 	}
 	return max;
 }
@@ -170,8 +169,8 @@ void complemento(Set A, Set B){
 	B_elem.tam = 0;
 	salva_elementos_pre_ordem(B->elem, &B_elem);
 	for(i = 0; i < B_elem.tam; i++){
-		printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]);/** prints2 **/
-		pArv(A->elem);/** prints2 **/
+		printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]);/********/
+		pArv(A->elem);/************/
 		remova(A, B_elem.v[i]);
 	}
 }
@@ -184,7 +183,7 @@ void salva_elementos_pre_ordem(Arvore A, VetInt * A_elem){
 }
 void imprime_final(VetInt R){
 	int i;
-	if(R.cobre && R.tam > 0){
+	if(R.tam > 0 && R.cobre){
 		printf("S%d ",R.v[0]);
 		for(i = 1; i < R.tam; i++){
 			printf("U S%d ",R.v[i]);
@@ -204,13 +203,12 @@ bool insira(Set C, int chave){
 	if(!inserivel) return false;
 	
 	while(afunila(onde)){
-		C->elem = onde; /** apagar isso **/
-		/*pSet(&C, 1, 'I'); prints3 **/
+		C->elem = onde;
+		/*pSet(&C, 1, 'I');*****************/
 	}
-	C->elem = onde;
 	(C->tam)++;
-	/*printf("\033[94mI\033[97m: "); prints3 **/
-	/*pArv(C->elem); prints3 **/
+	/*rintf("\033[94mI\033[97m: ");
+	pArv(C->elem);*/
 
 	return true;
 }
@@ -250,14 +248,13 @@ bool remova(Set C, int chave){
 	if(!removivel) return false;
 	
 	while(afunila(onde)){
-		C->elem = onde; /** apagar isso **/
-		/*pSet(&C, 1, 'R'); prints3 **/
+		C->elem = onde;
+		/*pSet(&C, 1, 'R');*/
 	}
-	C->elem = onde;
 	C->tam--;
 	
-	/*printf("\033[91mR\033[97m: "); prints3 **/
-	/*pArv(C->elem); prints3 **/
+	/*printf("\033[91mR\033[97m: ");
+	pArv(C->elem);*/
 
 	return true;
 }
@@ -266,24 +263,19 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 	NoArvBin *p, **subs = &p, *alvo = *Raiz;
 	if(*Raiz == NULL) 
 		return false;
-	if((*Raiz)->info == chave){
-		alvo = *Raiz;
-		if(alvo->esq == NULL) *onde = alvo->dir;
-		else *onde = alvo->esq; 
-	}
+	if((*Raiz)->info == chave) 
+		subs = Raiz;
 	/* alvo procura nó a ser removido */
-	else {
-		while(alvo != NULL && alvo->info != chave){
-			if(chave > alvo->info){
-				alvo = alvo->dir;
-			}else{
-				alvo = alvo->esq;
-			}
-		}if(alvo == NULL) 
-			return false;
-		/* remover alvo */
-		*onde = alvo->pai;
-	}
+	while(alvo != NULL && alvo->info != chave){
+		if(chave > alvo->info){
+			alvo = alvo->dir;
+		}else{
+			alvo = alvo->esq;
+		}
+	}if(alvo == NULL) 
+		return false;
+	/* remover alvo */
+	*onde = alvo->pai;
 	/* Se alvo só tem um filho */
 	if(alvo->dir == NULL){
 		(*subs) = alvo->esq;
@@ -308,10 +300,16 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 
 	/* Se tem os dois filhos, procura pelo mais a dir da subarvore esq */
 	}else{
+		/* Acha o subs */
 		for((*subs) = alvo->esq; (*subs)->dir != NULL; (*subs) = (*subs)->dir);
 
+		alvo->dir->pai = *subs;
+		alvo->esq->pai = *subs;
+		
+		/* Começa a trocar alvo por subs */
 		(*subs)->dir = alvo->dir;
 
+		/* Atribui subs ao filho (dir ou esq) de pai de alvo, se este existir*/
 		if(alvo->pai){
 			if(alvo->pai->dir == alvo) 
 				alvo->pai->dir = (*subs);
@@ -319,17 +317,21 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 				alvo->pai->esq = (*subs);
 		}
 		
+		/* Se subs é o primeiro a esquerda de alvo */
 		if((*subs) == alvo->esq)
+			/* Atribui */
 			(*subs)->pai->esq = (*subs)->esq;
-		else	
+		/*  */
+		else{	
 			(*subs)->pai->dir = (*subs)->esq;
+			(*subs)->esq = alvo->esq;
+		}
 		
+		/*  */
 		if((*subs)->esq)
 			(*subs)->esq->pai = (*subs)->pai;
 		
 		(*subs)->pai = alvo->pai;
-		(*subs)->esq = alvo->esq;
-		
 	}
 	free(alvo);
 
@@ -380,6 +382,7 @@ void rotacao(NoArvBin * f) {
 		}
 		f->esq->pai = f;
 	}
+
 }
 void liberaArvore(Arvore A){
 	if(A){
@@ -406,4 +409,5 @@ void pIn(Arvore A){
 		printf("%d ", A->info);
 		pIn(A->dir);
 	}
+	else printf("* ");
 }
