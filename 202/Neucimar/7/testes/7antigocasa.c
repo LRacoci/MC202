@@ -86,7 +86,7 @@ int main() {
 
 	R.v = (int*)malloc(n * sizeof(int));
 	R.tam = 0;
-	R.cobre = false;
+	R.cobre = true;
 
 	subsets = (Set*)malloc(n * sizeof(Set));
 
@@ -159,7 +159,7 @@ int maior(Set *S, int n){
 	for(i = max; i >= 0; i--){
 		if(S[i] && S[max]->tam < S[i]->tam)
 			max = i;
-		/*printf("\033[94mmax = %d\033[97m\n", max+1); prints2 **/
+		printf("\033[94mmax = %d\033[97m\n", max+1);/** prints2 **/
 	}
 	return max;
 }
@@ -170,8 +170,8 @@ void complemento(Set A, Set B){
 	B_elem.tam = 0;
 	salva_elementos_pre_ordem(B->elem, &B_elem);
 	for(i = 0; i < B_elem.tam; i++){
-		/*printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]); prints2 **/
-		/*pArv(A->elem); prints2 **/
+		printf("\033[92mChave\033[97m = %d:\n", B_elem.v[i]);/** prints2 **/
+		pArv(A->elem);/** prints2 **/
 		remova(A, B_elem.v[i]);
 	}
 }
