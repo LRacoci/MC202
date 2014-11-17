@@ -18,7 +18,7 @@ typedef struct Arvore{
 
 typedef struct Set{
 	int tam;
-	Arvore elem;
+	Arvore arv;
 } *Set, Conjunto;
 
 typedef struct VetInt{
@@ -30,74 +30,44 @@ typedef struct VetInt{
 /* TAD: Arvore Binária de Busca por Afunilamento */
 /************************************************/
 
-bool insira(Set C, int chave);
-void insere_arv_bin_recursivo(Arvore *p, int chave, bool* inserivel);
 bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde);
-bool insere_arv_bin_2(Arvore * Raiz, int chave, NoArvBin** onde);
-
-bool remova(Set C, int chave);
-bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde);
+bool remove_arv_bin(Arvore *Raiz, int chave,  NoArvBin** onde);
+void copia_arvore(Arvore* A, Arvore B);
 bool afunila(NoArvBin * f);
-void rotacao(NoArvBin * f);
-void liberaArvore(Arvore A);
+void rotacao(NoArvBin * f) ;
+void libera_arvore(Arvore X);
 
+/* Funções de Debugar */
 void pArv(Arvore A);
 void pPre(Arvore A);
 void pIn(Arvore A);
+bool confere_arvore(Arvore A, char *str);
+Arvore raiz(NoArvBin* p);	
+
+/* TAD: Conjuntos */
+/*****************/
+Set cria_conjunto();
+bool insira(Set C, int chave);
+bool remova(Set C, int chave);
+void copia_conjunto(Set *A, Set B);
+int maior(Set *S, int n);
+void complemento(Set A, Set B);
+void libera_conjunto(Set X);
+
+/* Funções de Debugar */
+void pSet(Set* x, int n, char *str);
+
 
 /* ASSINATURA DE OUTRAS FUNÇÕES */ 
 /*******************************/
 
-void cria_universo(Set U, int u);
-int maior(Set *subsets, int n);
-void remove_set(int M, Set *subset, int* n);
-void complemento(Set A, Set B);
-void salva_elementos_pre_ordem(Arvore A, VetInt * A_elem);
+void inicializa_universo(Set U, int u);
 void imprime_final(VetInt R);
+void salva_elementos(Set A, VetInt * A_elem);
 
-void pSet(Set* x, int n, char *str){
-	int i;
-	for(i = 0; i < n; i++){
-		printf("\033[93m%s[%d]\033[97m:\n", str, i+1);
-		if(x[i])pArv(x[i]->elem);
-		printf("\n");
-	}
-}
-void Confere(Arvore A, char *str){
-	if(!A)
-		return;
-	if(A->esq){
-		if(A->esq->pai != A){
-			printf("\033[91m%s\n", str);
-			printf("(%d)->pai != (%d), mas (%d)->esq == (%d)\n", 
-				   A->esq->info, A->info, A->info, A->esq->info);
-		}if(A->esq->info > A->info){
-			printf("\033[91m%s\n", str);
-			printf("%d > %d, mas (%d)->esq == (%d)\n", 
-				   A->esq->info, A->info, A->info, A->esq->info);
-		}
-	Confere(A->esq, str);
-	}if(A->dir){
-		if(A->dir->pai != A){
-			printf("\033[91m%s\n", str);
-			printf("(%d)->pai != (%d), mas (%d)->dir == (%d)\n", 
-				   A->dir->info, A->info, A->info, A->dir->info);
-		}if(A->dir->info < A->info){
-			printf("\033[91m%s\n", str);
-			printf("%d < %d, mas (%d)->dir == (%d)\n", 
-				   A->dir->info, A->info, A->info, A->dir->info);
-		}
-	Confere(A->dir, str);
-	}
-	printf("\033[97m");
-}
-Arvore raiz(NoArvBin* p){
-	if(p) 
-		while(p->pai){
-			p = p->pai;
-		}
-	return p;
-}
+/* Deletar */
+void salva_elementos_pre_ordem(Arvore A, VetInt * A_elem);
+
 
 /* MEU PROGRAMA - MAIN */
 /**********************/
@@ -114,13 +84,11 @@ int main() {
 
 	Set *subsets, universe, M = NULL;
 
-	universe = (Set)malloc(sizeof(Conjunto));
-	universe->tam = 0;
-	universe->elem = NULL;
+	universe = cria_conjunto();
 
 	scanf("%d %d\n", &u, &n);
 
-	cria_universo(universe, u);
+	inicializa_universo(universe, u);
 
 	R.v = (int*)malloc(n * sizeof(int));
 	R.tam = 0;
@@ -129,9 +97,7 @@ int main() {
 	subsets = (Set*)malloc(n * sizeof(Set));
 
 	for(i = 0; i < n; i++){
-		subsets[i] = (Set)malloc(sizeof(Conjunto));
-		subsets[i]->tam = 0;
-		subsets[i]->elem = NULL;
+		subsets[i] = cria_conjunto();
 		scanf("s");
 		while(scanf("%c", &c) != EOF && c == ' '){
 			scanf("%d", &atual);
@@ -158,26 +124,16 @@ int main() {
 		R.v[R.tam++] = M_indice + 1;
 		/** imprime_final(R); db prints1 **/
 		/** printf("\n"); db prints1 **/
-		if(!M){
-			/** printf("\033[91mERRO 2\033[97m\n"); dbERROS **/
-			exit(1);
-		}
-		liberaArvore(M->elem);
-		free(M); 
+		libera_conjunto(M);
 	}
 	R.cobre = universe->tam == 0;
 
 	imprime_final(R);
 	free(R.v);
-	if(universe){
-		liberaArvore(universe->elem);
-		free(universe); 
-	}
+	
+	libera_conjunto(universe);
 	for(i = 0; i < n; i++){
-		if((subsets[i])){
-			liberaArvore(subsets[i]->elem);
-			free(subsets[i]);
-		}
+		libera_conjunto(subsets[i]);
 	}
 	free(subsets);
 
@@ -188,41 +144,10 @@ int main() {
 /***********************************/
 /**********************************/
 
-void cria_universo(Set U, int u){
+void inicializa_universo(Set U, int u){
 	int i;
 	for(i = 1; i <= u; i++){
 		insira(U, i);
-	}
-}
-int maior(Set *S, int n){
-	int i, max;
-	for(max = n-1; max >= 0; max--){
-		if(S[max] && S[max]->tam){
-			break;
-		}
-	}
-	for(i = max; i >= 0; i--){
-		if(S[i] && S[max]->tam < S[i]->tam)
-			max = i;
-		/** printf("\033[94mmax = %d\033[97m\n", max+1); db prints2 **/
-	}
-	return max;
-}
-void complemento(Set A, Set B){
-	int i;
-	VetInt B_elem;
-	B_elem.v = (int*)malloc(B->tam * sizeof(int));
-	B_elem.tam = 0;
-	salva_elementos_pre_ordem(B->elem, &B_elem);
-	for(i = 0; i < B_elem.tam; i++){
-		remova(A, B_elem.v[i]);
-	}
-}
-void salva_elementos_pre_ordem(Arvore A, VetInt * A_elem){
-	if(A){
-		A_elem->v[A_elem->tam++] = A->info;
-		salva_elementos_pre_ordem(A->esq, A_elem);
-		salva_elementos_pre_ordem(A->dir, A_elem);
 	}
 }
 void imprime_final(VetInt R){
@@ -241,99 +166,123 @@ void imprime_final(VetInt R){
 /*****************************************/
 /****************************************/
 
+/* TAD: Conjuntos */
+/*****************/
+
+Set cria_conjunto(){
+	Set novo = (Set)malloc(sizeof(Conjunto));
+	novo->tam = 0;
+	novo->arv = NULL;
+	return novo;
+}
 bool insira(Set C, int chave){
 	NoArvBin *onde;
 	bool inserivel;
 	
 	/** printf("\033[92mI:Chave\033[97m = %d:\n", chave); db prints2 **/
-	/** pArv(C->elem); db prints2 **/
-	/** Confere(C->elem, "I: Antes de inserir:"); db RevisaArvore **/
+	/** pArv(C->arv); db prints2 **/
+	/** confere_arvore(C->arv, "I: Antes de inserir:"); db RevisaArvore **/
 
-	inserivel = insere_arv_bin(&C->elem, chave, &onde);
+	inserivel = insere_arv_bin(&C->arv, chave, &onde);
 	if(!inserivel) return false;
 	
-	/** Confere(C->elem, "I: Antes de afunilar:"); db RevisaArvore **/
+	/** confere_arvore(C->arv, "I: Antes de afunilar:"); db RevisaArvore **/
 	/** pSet(&C, 1, "R: Antes de Afunilar"); db prints3 **/
 
 	while(afunila(onde)){
-		C->elem = onde; /** apagar isso **/
+		C->arv = onde; /** apagar isso **/
 		/** pSet(&C, 1, "I: Afunilando"); db Afunilando **/
 	}
 
-	/** Confere(C->elem, "I: Depois de afunilar:"); db RevisaArvore **/
+	/** confere_arvore(C->arv, "I: Depois de afunilar:"); db RevisaArvore **/
 	/** pSet(&C, 1, "I: Final"); db prints3 **/
 
-	C->elem = onde;
+	C->arv = onde;
 	(C->tam)++;
 
 
 	return true;
 }
-void insere_arv_bin_recursivo(Arvore *p, int chave, bool* inserivel){
-	if(*p == NULL) {
-		*inserivel = true;
-		*p = (Arvore)malloc(sizeof(NoArvBin));
-		(*p)->info = chave;
-		while((*p)->info != chave){
-			printf("(*p)->info = %d e chave = %d\n", (*p)->info, chave);
-			(*p)->info = chave*((*p)->info/chave);
-			printf("(*p)->info = %d e chave = %d\n", (*p)->info, chave);
-		}
-		(*p)->esq = NULL;
-		(*p)->dir = NULL;
+bool remova(Set C, int chave){
+	NoArvBin *onde;
+	bool removivel;
+	
+	/** printf("\033[92mR:Chave\033[97m = %d:\n", chave); db prints2 **/
+	/** pArv(C->arv); db prints2 **/
+
+	/** confere_arvore(C->arv, "R: Antes de remover:"); db RevisaArvore **/
+	removivel = remove_arv_bin(&C->arv, chave, &onde);
+	if(!removivel) return false;
+
+	/** confere_arvore(C->arv, "R: Antes de afunilar:"); db RevisaArvore **/
+	/** pSet(&C, 1, "R: Antes de Afunilar"); db prints3 **/
+
+	while(afunila(onde)){
+		/** pSet(&C, 1, "R: Afunilando"); db Afunilando **/
 	}
-	else if(chave == (*p)->info)
-		*inserivel = false;
-	else if(chave < (*p)->info){
-		insere_arv_bin_recursivo(&(*p)->esq, chave, inserivel);
-		(*p)->esq->pai = *p;
-	}else{
-		insere_arv_bin_recursivo(&(*p)->dir, chave, inserivel);
-		(*p)->dir->pai = *p;
-	}
-}
-bool insere_arv_bin_2(Arvore * Raiz, int chave, NoArvBin** onde){
-	bool esquerdo, ehraiz = false;
-	NoArvBin *temp = NULL;
-	Arvore f = *Raiz;
-	if(f == NULL)
-		ehraiz = true;
-	while (f != NULL){
-		if(chave < f->info){
-			temp = f;
-			f = temp->esq;
-			esquerdo = true;
-		}else if(chave > f->info){
-			temp = f;
-			f = temp->dir;
-			esquerdo = false;
-		}else{
-			*onde = NULL;
-			return false;
-		}
-	}
-	f = (Arvore)malloc(sizeof(NoArvBin));
-	f->info = chave;
-	/*Loop WTF*/
-	while(f->info != chave){
-		f->info = chave;
-	}
-	f->esq = NULL;
-	f->dir = NULL;
-	f->pai = temp;
-	if(temp){
-		if(esquerdo){
-			temp->esq = f;
-		}else{
-			temp->dir = f;
-		}
-	}
-	*onde = f;
-	if(ehraiz)
-		*Raiz = f;
-		
+
+	/** confere_arvore(C->arv, "R: Depois de afunilar:"); db RevisaArvore **/
+	/** pSet(&C, 1, "R: Final"); db prints3 **/
+	
+	C->arv = onde;
+	C->tam--;
+
+
 	return true;
 }
+void copia_conjunto(Set *A, Set B){
+	if(B){
+		*A = (Set)malloc(sizeof(Conjunto));
+		(*A)->tam = B->tam;
+		copia_arvore(&((*A)->arv), B->arv);
+	}else{
+		*A = NULL;
+	}
+}
+int maior(Set *S, int n){
+	int i, max;
+	for(max = n-1; max >= 0; max--){
+		if(S[max] && S[max]->tam){
+			break;
+		}
+	}
+	for(i = max; i >= 0; i--){
+		if(S[i] && S[max]->tam < S[i]->tam)
+			max = i;
+		/** printf("\033[94mmax = %d\033[97m\n", max+1); db prints2 **/
+	}
+	return max;
+}
+void complemento(Set A, Set C){
+	Set B;
+	copia_conjunto(&B, C);
+	while(B->tam > 0){
+		remova(A, B->arv->info);
+		remova(B, B->arv->info);
+
+	}
+	libera_conjunto(B);
+}
+void libera_conjunto(Set X){
+	if(X){
+		libera_arvore(X->arv);
+		free(X);
+	}
+}
+
+void pSet(Set* x, int n, char *str){
+	int i;
+	for(i = 0; i < n; i++){
+		printf("\033[93m%s[%d]\033[97m:\n", str, i+1);
+		if(x[i])pArv(x[i]->arv);
+		printf("\n");
+	}
+}
+
+
+/* TAD: Arvore Binária de Busca por Afunilamento */
+/************************************************/
+
 bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde){
 	NoArvBin *temp = NULL;
 	Arvore *p = Raiz;
@@ -355,37 +304,6 @@ bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde){
 	(*p)->pai = temp;
 	*onde = *p;
 		
-	return true;
-}
-bool remova(Set C, int chave){
-	NoArvBin *onde;
-	bool removivel;
-	
-	/** printf("\033[92mR:Chave\033[97m = %d:\n", chave); db prints2 **/
-	/** pArv(C->elem); db prints2 **/
-
-	/** Confere(C->elem, "R: Antes de remover:"); db RevisaArvore **/
-	removivel = remove_arv_bin(&C->elem, chave, &onde);
-	if(!removivel) return false;
-
-	/** Confere(C->elem, "R: Antes de afunilar:"); db RevisaArvore **/
-	/** pSet(&C, 1, "R: Antes de Afunilar"); db prints3 **/
-
-	while(afunila(onde)){
-		C->elem = onde; /** apagar isso **/
-		/** pSet(&C, 1, "R: Afunilando"); db Afunilando **/
-	}
-
-	/** Confere(C->elem, "R: Depois de afunilar:"); db RevisaArvore **/
-	/** pSet(&C, 1, "R: Final"); db prints3 **/
-	
-	C->elem = onde;
-	C->tam--;
-	if(C->tam < 0){
-		/** printf("\033[91mERRO 3\033[97m\n"); dbERROS **/
-	}
-
-
 	return true;
 }
 bool remove_arv_bin(Arvore *Raiz, int chave,  NoArvBin** onde){
@@ -459,12 +377,22 @@ bool remove_arv_bin(Arvore *Raiz, int chave,  NoArvBin** onde){
 		
 	}
 	if(alvo == *Raiz){
-		*onde = *Raiz = subs;
+		*Raiz = subs;
+		*onde = subs;
 	}else{
 		*onde = alvo->pai;
 	}
 	free(alvo);
 	return true;
+}
+void copia_arvore(Arvore * A, Arvore B){
+	*A = NULL;
+	if(B){
+		*A = (Arvore) malloc(sizeof(NoArvBin));
+		(*A)->info = B->info;
+		copia_arvore(&((*A)->esq), B->esq);
+		copia_arvore(&((*A)->dir), B->dir);
+	}
 }
 bool afunila(NoArvBin * f){
 	NoArvBin *p, *a;
@@ -479,17 +407,17 @@ bool afunila(NoArvBin * f){
 	}else{
 		/* Se for homagêneo */
 		if((a->dir == p && p->dir == f) || (a->esq == p && p->esq == f)){
-			/** Confere(raiz(f), "Homogêneo: Antes de r(p)"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Homogêneo: Antes de r(p)"); db Revisa Rotações **/
 			rotacao(p);
-			/** Confere(raiz(f), "Homogêneo: Antes de r(f)"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Homogêneo: Antes de r(f)"); db Revisa Rotações **/
 			rotacao(f);
-			/** Confere(raiz(f), "Homogêneo: Depois de r(f)"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Homogêneo: Depois de r(f)"); db Revisa Rotações **/
 		}else{
-			/** Confere(raiz(f), "Heterogêneo: Antes do r(f) 1"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Heterogêneo: Antes do r(f) 1"); db Revisa Rotações **/
 			rotacao(f);
-			/** Confere(raiz(f), "Heterogêneo: Antes do r(f) 2"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Heterogêneo: Antes do r(f) 2"); db Revisa Rotações **/
 			rotacao(f);
-			/** Confere(raiz(f), "Heterogêneo: Depois do r(f) 2"); db Revisa Rotações **/
+			/** confere_arvore(raiz(f), "Heterogêneo: Depois do r(f) 2"); db Revisa Rotações **/
 		}
 	}
 	return true;
@@ -518,13 +446,14 @@ void rotacao(NoArvBin * f) {
 		f->esq->pai = f;
 	}
 }
-void liberaArvore(Arvore A){
-	if(A){
-		liberaArvore(A->dir);
-		liberaArvore(A->esq);
-		free(A);
+void libera_arvore(Arvore X){
+	if(X){
+		libera_arvore(X->dir);
+		libera_arvore(X->esq);
+		free(X);
 	}
 }
+
 void pArv(Arvore A){
 	if(!A) return;
 	pPre(A); printf("\n");
@@ -543,4 +472,47 @@ void pIn(Arvore A){
 		printf("%d ", A->info);
 		pIn(A->dir);
 	}
+}
+bool confere_arvore(Arvore A, char *str){
+	if(!A)
+		return true;
+	if(A->esq){
+		if(A->esq->pai != A){
+			printf("\033[91m%s\n", str);
+			printf("(%d)->pai != (%d), mas (%d)->esq == (%d)\n", 
+				   A->esq->info, A->info, A->info, A->esq->info);
+			printf("\033[97m");
+			return false;
+		}if(A->esq->info > A->info){
+			printf("\033[91m%s\n", str);
+			printf("%d > %d, mas (%d)->esq == (%d)\n", 
+				   A->esq->info, A->info, A->info, A->esq->info);
+			printf("\033[97m");
+			return false;
+		}
+	confere_arvore(A->esq, str);
+	}if(A->dir){
+		if(A->dir->pai != A){
+			printf("\033[91m%s\n", str);
+			printf("(%d)->pai != (%d), mas (%d)->dir == (%d)\n", 
+				   A->dir->info, A->info, A->info, A->dir->info);
+			return false;
+		}if(A->dir->info < A->info){
+			printf("\033[91m%s\n", str);
+			printf("%d < %d, mas (%d)->dir == (%d)\n", 
+				   A->dir->info, A->info, A->info, A->dir->info);
+			printf("\033[97m");
+			return false;
+		}
+	confere_arvore(A->dir, str);
+	}
+	printf("\033[97m");
+	return true;
+}
+Arvore raiz(NoArvBin* p){
+	if(p) 
+		while(p->pai){
+			p = p->pai;
+		}
+	return p;
 }
