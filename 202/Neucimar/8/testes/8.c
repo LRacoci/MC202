@@ -32,7 +32,7 @@ struct Lista{
 /* TAD: Arvore Binária de Busca por Afunilamento */
 /************************************************/
 
-void cria_arvore(int chave){
+Arvore cria_arvore(int chave){
 	Arvore nova = (Arvore)malloc(sizeof(NoArvore));
 	nova->info = chave;
 	nova->grau = 0;
@@ -79,11 +79,25 @@ void lca(Arvore A, Arvore B){
 }
 
 /* Funções de Debugar */
-void pArv(Arvore A);
-void pPre(Arvore A);
-void pIn(Arvore A);
+void spaces(int n){
+	while(n > 0){
+		printf("  ");
+		n--;
+	}
+}
+void pArv_aux(Arvore A, int i){
+	Lista p;
+	spaces(i); printf("%d\n", A->info);
+	for(p = A->filhos->prox; p != NULL; p = p->prox){
+		pArv_aux(p->arv, i + 1);
+	}
+}
+void pArv(Arvore A){
+	while(A->pai != NULL) A = A->pai;
+	pArv_aux(A, 0);
+}
 void confere_arvore(Arvore A, char *str);
-Arvore raiz(NoArvBin* p);	
+Arvore raiz(NoArvore* p);	
 
 /* TAD: Arvore Binária de Busca por Afunilamento */
 /************************************************/
@@ -93,19 +107,26 @@ Arvore raiz(NoArvBin* p);
 
 Floresta inicializa_floresta(int n){
 	int i;
-	Floresta nova = (Floresta) malloc(sizeof(n * Arvore));
-	for (i = 1; i <= n, i++){
-		v[i] = cria_arvore();
+	Floresta nova = (Floresta) malloc(n * sizeof(Arvore));
+	for (i = 0; i < n; i++){
+		nova[i] = cria_arvore(i+1);
 	}
+	return nova;
 }
 
 void operacao(Floresta in){
 	int a, b;
 	char str[MAX];
-	scanf("%s %d %d", str, &a, &b);
-	a--; b--;
-	if(strcmp(str, "lca") == 0){
-		lca(in[a], in[b]);
+	scanf("%s", str);
+	if(strcmp(str, "cut") == 0){
+		scanf("%d", &a);
+		cut(in[a-1]);
+	}else if(strcmp(str, "link") == 0){
+		scanf("%d %d", &a, &b);
+		link(in[a-1], in[b-1]);
+	}else if(strcmp(str, "lca") == 0){
+		scanf("%d %d", &a, &b);
+		lca(in[a-1], in[b-1]);
 	}
 
 
@@ -119,10 +140,10 @@ void operacao(Floresta in){
 int main() { 
 	int i, n, m;
 	Floresta entrada;
-	scanf("%d %d", n, m);
+	scanf("%d %d", &n, &m);
 	entrada = inicializa_floresta(n);
 	for(i = 0; i < m; i++){
-		operacao(Floresta, n);
+		operacao(entrada);
 	}
 	
 
