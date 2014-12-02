@@ -1,5 +1,5 @@
 /* Nome: Lucas Alves Racoci
- * RA: 156331 
+ * RA: 156331
  * Laboratorio 08 - Menor Ancestral Comum */
 
 #include <stdio.h>
@@ -192,4 +192,86 @@ void lca(Arvore A, Arvore B){
 			return;
 		}
 	}
+<<<<<<< HEAD
 }
+=======
+}
+void pArv(Arvore A, char *str){
+	printf("  \033[92m%s\033[97m\n",str);
+	printf("  (%d)->raiz = ", A->info);
+	while(A->pai != NULL) A = A->pai;
+<<<<<<< HEAD
+	pArv_aux(A, 0);
+}
+void confere_arvore(Arvore A, char *str);
+Arvore raiz(NoArvore* p);
+
+/* TAD: Arvore Binária de Busca por Afunilamento */
+/************************************************/
+
+/* ASSINATURA DE OUTRAS FUNÇÕES */
+/*******************************/
+
+Floresta inicializa_floresta(int n){
+	int i;
+	Floresta nova = (Floresta) malloc(n * sizeof(Arvore));
+	for (i = 0; i < n; i++){
+		nova[i] = cria_arvore(i+1);
+	}
+	return nova;
+}
+
+void operacao(Floresta in){
+	int a, b;
+	char str[MAX];
+	scanf("%s", str);
+	if(strcmp(str, "cut") == 0){
+		scanf("%d", &a);
+		cut(in[a-1]);
+	}else if(strcmp(str, "link") == 0){
+		scanf("%d %d", &a, &b);
+		link(in[a-1], in[b-1]);
+	}else if(strcmp(str, "lca") == 0){
+		scanf("%d %d", &a, &b);
+		lca(in[a-1], in[b-1]);
+	}
+
+
+}
+
+
+/* MEU PROGRAMA - MAIN */
+/**********************/
+/*********************/
+
+int main() {
+	int i, n, m;
+	Floresta entrada;
+	scanf("%d %d", &n, &m);
+	entrada = inicializa_floresta(n);
+	for(i = 0; i < m; i++){
+		operacao(entrada);
+	}
+
+
+	return 0;
+}
+
+/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */
+/***********************************/
+/**********************************/
+
+/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */
+/*****************************************/
+/****************************************/
+
+
+/* TAD: Arvore Binária de Busca por Afunilamento */
+/************************************************/
+=======
+	printf("%d\n", A->info);
+	pArv_aux(A, 2);
+	printf("\n");
+}
+>>>>>>> 9adf84216baffee95353bf928114094ecb1651d8
+>>>>>>> 96a4e21dd2451803aad5571f3f4c9832a556a7e7
