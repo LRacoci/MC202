@@ -9,28 +9,26 @@
 #define MAX 10
 
 
-/* STRUCTS, DEFINIÃ‡Ã•ES E CABEÃ‡ALHOS DAS MINHAS FUNÃ‡Ã•ES DA TAD */
+/* STRUCTS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
 /*************************************************************/
 
 typedef enum bool{false, true} bool;
 
-/* Define estruturas de lista e Ã¡rvore */
+/* Define estruturas de lista e árvore */
 typedef struct Lista NoLista, *Lista;
 typedef struct Arvore NoArvore, *Arvore, **Floresta;
 
-/* Cada nÃ³ da Ã¡rvore tem: ... */
+/* Cada nó da árvore tem: ... */
 struct Arvore{
-	/* ... InformaÃ§Ã£o inteira */ 
+	/* ... Informação inteira */ 
 	int info;
-	/* ... Guarda a profundidade do nÃ³ */
-	int profundidade;
 	/* ... Ponteiro para o pai */
 	Arvore pai;
 	/* ... Uma lista de filhos */
 	Lista filhos;
 };
-/* Uso uma lista duplamente ligada circular com no cabeÃ§a
- * cuja informaÃ§Ã£o Ã© uma Ã¡rvore */
+/* Uso uma lista duplamente ligada circular com no cabeça
+ * cuja informação é uma árvore */
 struct Lista{
 	Arvore arv;
 	Lista prox, ant;
@@ -43,15 +41,15 @@ struct Lista{
 Floresta inicializa_floresta(int n);
 void libera_floresta(Floresta X, int n);
 
-/* Cria Ã¡rvore geral */
+/* Cria árvore geral */
 Arvore cria_arvore(int chave);
 
-/* Realiza as 3 operaÃ§Ãµes definidas no enunciado */
+/* Realiza as 3 operações definidas no enunciado */
 void link(Arvore A, Arvore B);
 void cut(Arvore A);
 void lca(Arvore A, Arvore B);
 
-/* ASSINATURA DE OUTRAS FUNÃ‡Ã•ES */ 
+/* ASSINATURA DE OUTRAS FUNÇÕES */ 
 /*******************************/
 
 void operacao(Floresta in);
@@ -75,18 +73,18 @@ int main() {
 	return 0;
 } 
 
-/* IMPLEMENTAÃ‡ÃƒO DES OUTRAS FUNÃ‡Ã•ES */ 
+/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */ 
 /***********************************/
 /**********************************/
 
-/* Resolve operaÃ§Ãµes da entrada */
+/* Resolve operações da entrada */
 void operacao(Floresta in){
 	int a, b;
 	char op[MAX];
 	scanf("%s", op);
 	if(strcmp(op, "cut") == 0){
 		scanf("%d", &a);
-		/* Acessa a posiÃ§Ã£o correspondente no vetor */
+		/* Acessa a posição correspondente no vetor */
 		cut(in[a-1]);
 	}else if(strcmp(op, "link") == 0){
 		scanf("%d %d", &a, &b);
@@ -97,14 +95,14 @@ void operacao(Floresta in){
 	}
 }
 
-/* IMPLEMENTAÃ‡ÃƒO DAS FUNÃ‡Ã•ES DE MINHA TAD */ 
+/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
 /*****************************************/
 /****************************************/
 
 /* TAD: Arvores Gerais */
 /**********************/
 
-/* Inicializa um vetor de Ã¡rvores e cria uma Ã¡rvore pra cada posiÃ§Ã£o */
+/* Inicializa um vetor de árvores e cria uma árvore pra cada posição */
 Floresta inicializa_floresta(int n){
 	int i;
 	Floresta nova = (Floresta) malloc(n * sizeof(Arvore));
@@ -113,12 +111,13 @@ Floresta inicializa_floresta(int n){
 	}
 	return nova;
 }
-/* Libera todas as Ã¡rvores do vetor de Ã¡rvores alocadas */
+/* Libera todas as árvores do vetor de árvores alocadas */
 void libera_floresta(Floresta X, int n){
 	int i;
-	Lista p;
+	Lista p, aux;
 	for(i = 0; i < n; i++){
-		for(p = X[i]->filhos->prox; p->arv != NULL; p = p->prox){
+		for(p = X[i]->filhos->prox; p->arv != NULL; p = aux){
+			aux = p->prox;
 			free(p);
 		}
 		free(p);
@@ -126,15 +125,12 @@ void libera_floresta(Floresta X, int n){
 	}
 	free(X);
 }
-
-
-/* Cria um no de arvore e o no cabeÃ§a da lista de filhos */
+/* Cria um no de arvore e o no cabeça da lista de filhos */
 Arvore cria_arvore(int chave){
 	Arvore nova = (Arvore)malloc(sizeof(NoArvore));
 	nova->info = chave;
 	nova->pai = NULL;
-	/* A profundidade de uma arvore de um Ãºnico nÃ³ Ã© 1 */
-	nova->profundidade = 1;
+	/* A profundidade de uma arvore de um único nó é 1 */
 	nova->filhos = (Lista)malloc(sizeof(NoLista));
 	nova->filhos->prox = nova->filhos;
 	nova->filhos->ant =  nova->filhos;
@@ -145,8 +141,6 @@ Arvore cria_arvore(int chave){
 void link(Arvore A, Arvore B){
 	Lista novo;
 	A->pai = B;
-	/* Atualiza a profundidade de A */
-	A->profundidade = B->profundidade + 1;
 	novo = (Lista)malloc(sizeof(NoLista));
 	novo->ant = B->filhos->ant;
 	novo->prox = B->filhos;
@@ -154,7 +148,7 @@ void link(Arvore A, Arvore B){
 	B->filhos->ant->prox = novo;
 	B->filhos->ant = novo;
 }
-/* Retira as referÃªncias criadas na funÃ§Ã£o anteriror e desaloca o nÃ³
+/* Retira as referências criadas na função anteriror e desaloca o nó
  * na lista de filhos do pai de A que guardava o A */
 void cut(Arvore A){
 	Lista p;
@@ -164,30 +158,38 @@ void cut(Arvore A){
 			p->prox->ant = p->ant;
 			free(p);
 			A->pai = NULL;
-			/* Volta a profundidade pra 1, pq ele n tem mais pai */
-			A->profundidade = 1;
 			return;
 		}
 	}
 }
-/* Acha o ultimo ancestral comum que Ã© ascendente de A e B ao mesmo tempo */
+/* Acha o ultimo ancestral comum que é ascendente de A e B ao mesmo tempo */
 void lca(Arvore A, Arvore B){
 	Arvore auxA = A, auxB = B;
+	int profundidade_A = 0, profundidade_B = 0;
+	/*Calcula a profundidade de A e B*/
+	while(auxA){
+		auxA = auxA->pai;
+		profundidade_A++;
+	}
+	while(auxB){
+		auxB = auxB->pai;
+		profundidade_B++;
+	}
 	/* Iguala as duas profundidades */
-	if (B->profundidade > A->profundidade){
-		while(auxB->profundidade > auxA->profundidade){
-			auxB = auxB->pai;
-		}
-	}else if (A->profundidade > B->profundidade){
-		while(auxA->profundidade > auxB->profundidade){
-			auxA = auxA->pai;
-		}
+	auxA = A; auxB = B;
+	while(profundidade_B > profundidade_A){
+		auxB = auxB->pai;
+		profundidade_B--;
+	}
+	while(profundidade_A > profundidade_B){
+		auxA = auxA->pai;
+		profundidade_A--;
 	}
 	/* Percorre os pais de A e B ao mesmo tempo*/
 	for(; auxA != NULL; auxA = auxA->pai, auxB = auxB->pai){
 		/* Se em algum momento eles forem iguais */
 		if(auxA == auxB){
-			/* ...imprimi-se sua informaÃ§Ã£o */
+			/* ...imprimi-se sua informação */
 			printf("%d\n", auxA->info);
 			return;
 		}
