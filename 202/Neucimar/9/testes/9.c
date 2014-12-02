@@ -110,10 +110,10 @@ Arvore23 arvore23_aloca(){
 void arvore23_libera(Arvore23 t){
 	int i;
 	if(t!=NULL){
-		for(i = 0; i < 3; i++){
+		for(i = 0; i <= MAX_CHAVES; i++){
 			arvore23_libera(t->filho[i]);
 		}
-		free(t); t=NULL;
+		free(t);
 	}
 }
 
@@ -138,11 +138,12 @@ void insere_pagina(Arvore23 *t, int chave){
 		(*t)->chave[0] = chave;
 		((*t)->nchaves)++;
 		return;
-	}if(t->nchaves < MAX_CHAVES){
-		i = t->nchaves - 1;
-		while(chave < t->chave[i] && i > 0)
-			t->chave[i] = t->chave[--i];
-		t->chave[i] = chave;
+	}if((*t)->nchaves < MAX_CHAVES){
+		i = (*t)->nchaves - 1;
+		while(chave < (*t)->chave[i] && i > 0)
+			(*t)->chave[i] = (*t)->chave[--i];
+		(*t)->chave[i] = chave;
+		(*t)->nchaves++;
 		return;
 	}else{
 		/*split()*/
@@ -154,37 +155,25 @@ void insere_pagina(Arvore23 *t, int chave){
 void arvore23_insere(Arvore23 *t, int chave){
 	int i, pai;
 	Arvore23 *p;
-	if(*t == NULL) /*se t for vazia*/{
+	if(*t == NULL){ /*se t for vazia*/
+		(*t) = cria_pagina_arvore23();
 		insere_pagina(t, chave);
+		return;
 	}
-	if (!arvore23_busca((*t), chave)) /*se chave ja existe em árvore*/ 
+	if(!arvore23_busca((*t), chave)) /*se chave ja existe em árvore*/ 
 		return;
 	p = t;
-	/* Enquanto não é folha */
-	while(p->filho[0] != NULL){
-		if(chave < p->chave[0]){
-			p = p->filho[0];
-		}else if(chave < p->chave[1]){
-			p = p->filho[1];
+	/* Enquanto p não é folha */
+	while((*p)->filho[0] != NULL){
+		if(chave < (*p)->chave[0]){
+			(*p) = (*p)->filho[0];
+		}else if(chave < (*p)->chave[1]){
+			(*p) = (*p)->filho[1];
 		}else {
-			p = p->filho[2];
+			(*p) = (*p)->filho[2];
 		}
 	}
-
-	if(t->nchaves < MAX_CHAVES){
-		i = t->nchaves - 1;
-		while(chave < t->chave[i] && i > 0)
-			t->chave[i] = t->chave[--i];
-		t->chave[i] = chave;
-	}else{
-		/*split()*/
-		pai = (t->chave)/2;
-		if(t->pai == NULL){
-			t->pai = cria_pagina_arvore23();
-		}
-
-
-	}
+	insere_pagina(p, chave);
 }
 
 bool arvore23_busca(Arvore23 t, int chave){
