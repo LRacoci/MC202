@@ -1,5 +1,5 @@
 /* Nome: Lucas Alves Racoci
- * RA: 156331 
+ * RA: 156331
  * Laboratorio 07 - Cobertura de Conjuntos */
 
 #include <stdio.h>
@@ -42,7 +42,7 @@ void pArv(Arvore A);
 void pPre(Arvore A);
 void pIn(Arvore A);
 
-/* ASSINATURA DE OUTRAS FUNÇÕES */ 
+/* ASSINATURA DE OUTRAS FUNÇÕES */
 /*******************************/
 
 void cria_universo(Set U, int u);
@@ -65,7 +65,7 @@ void pSet(Set* x, int n, char c){
 /**********************/
 /*********************/
 
-int main() { 
+int main() {
 	int n, u;
 
 	int i, j, M_indice;
@@ -104,7 +104,7 @@ int main() {
 			}
 		}
 	}
-	
+
 	for(i = 0; i < n; i++){
 		/*pSet(subsets, n, 'S');************/
 		M_indice = maior(subsets, n);
@@ -112,7 +112,7 @@ int main() {
 		if(M_indice == -1) break;
 		subsets[M_indice] = NULL;
 		for(j = 0; j < n; j++){
-			if(subsets[j] && subsets[j]->tam) 
+			if(subsets[j] && subsets[j]->tam)
 				complemento(subsets[j], M);
 		}
 		complemento(universe, M);
@@ -126,7 +126,7 @@ int main() {
 	free(R.v);
 	if(universe){
 		liberaArvore(universe->elem);
-		free(universe); 
+		free(universe);
 	}
 	for(i = 0; i < n; i++){
 		if((subsets[i])){
@@ -137,9 +137,9 @@ int main() {
 	free(subsets);
 
 	return 0;
-} 
+}
 
-/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */ 
+/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */
 /***********************************/
 /**********************************/
 
@@ -193,7 +193,7 @@ void imprime_final(VetInt R){
 	else printf(":(\n");
 }
 
-/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
+/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */
 /*****************************************/
 /****************************************/
 
@@ -201,7 +201,7 @@ bool insira(Set C, int chave){
 	NoArvBin *onde;
 	bool inserivel = insere_arv_bin(&C->elem, chave, &onde);
 	if(!inserivel) return false;
-	
+
 	while(afunila(onde)){
 		C->elem = onde;
 		/*pSet(&C, 1, 'I');*****************/
@@ -232,27 +232,27 @@ bool insere_arv_bin(Arvore * Raiz, int chave, NoArvBin** onde){
 				return false;
 			}
 		}
-	} 
+	}
 	(*p) = (Arvore)malloc(sizeof(NoArvBin));
 	(*p)->info = chave;
 	(*p)->esq = NULL;
 	(*p)->dir = NULL;
 	(*p)->pai = temp;
 	*onde = *p;
-		
+
 	return true;
 }
 bool remova(Set C, int chave){
 	NoArvBin *onde;
 	bool removivel = remove_arv_bin(&C->elem, chave, &onde);
 	if(!removivel) return false;
-	
+
 	while(afunila(onde)){
 		C->elem = onde;
 		/*pSet(&C, 1, 'R');*/
 	}
 	C->tam--;
-	
+
 	/*printf("\033[91mR\033[97m: ");
 	pArv(C->elem);*/
 
@@ -261,9 +261,9 @@ bool remova(Set C, int chave){
 bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 	/* subs acha um substituto pra alvo */
 	NoArvBin *p, **subs = &p, *alvo = *Raiz;
-	if(*Raiz == NULL) 
+	if(*Raiz == NULL)
 		return false;
-	if((*Raiz)->info == chave) 
+	if((*Raiz)->info == chave)
 		subs = Raiz;
 	/* alvo procura nó a ser removido */
 	while(alvo != NULL && alvo->info != chave){
@@ -272,7 +272,7 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 		}else{
 			alvo = alvo->esq;
 		}
-	}if(alvo == NULL) 
+	}if(alvo == NULL)
 		return false;
 	/* remover alvo */
 	*onde = alvo->pai;
@@ -280,9 +280,9 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 	if(alvo->dir == NULL){
 		(*subs) = alvo->esq;
 		if(alvo->pai){
-			if(alvo->pai->dir == alvo) 
+			if(alvo->pai->dir == alvo)
 				alvo->pai->dir = (*subs);
-			else 
+			else
 				alvo->pai->esq = (*subs);
 		}
 		if((*subs)) (*subs)->pai = alvo->pai;
@@ -291,9 +291,9 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 		(*subs) = alvo->dir;
 
 		if(alvo->pai){
-			if(alvo->pai->dir == alvo) 
+			if(alvo->pai->dir == alvo)
 				alvo->pai->dir = (*subs);
-			else 
+			else
 				alvo->pai->esq = (*subs);
 		}
 		(*subs)->pai = alvo->pai;
@@ -305,32 +305,32 @@ bool remove_arv_bin(Arvore * Raiz, int chave,  NoArvBin** onde){
 
 		alvo->dir->pai = *subs;
 		alvo->esq->pai = *subs;
-		
+
 		/* Começa a trocar alvo por subs */
 		(*subs)->dir = alvo->dir;
 
 		/* Atribui subs ao filho (dir ou esq) de pai de alvo, se este existir*/
 		if(alvo->pai){
-			if(alvo->pai->dir == alvo) 
+			if(alvo->pai->dir == alvo)
 				alvo->pai->dir = (*subs);
-			else 
+			else
 				alvo->pai->esq = (*subs);
 		}
-		
+
 		/* Se subs é o primeiro a esquerda de alvo */
 		if((*subs) == alvo->esq)
 			/* Atribui */
 			(*subs)->pai->esq = (*subs)->esq;
 		/*  */
-		else{	
+		else{
 			(*subs)->pai->dir = (*subs)->esq;
 			(*subs)->esq = alvo->esq;
 		}
-		
+
 		/*  */
 		if((*subs)->esq)
 			(*subs)->esq->pai = (*subs)->pai;
-		
+
 		(*subs)->pai = alvo->pai;
 	}
 	free(alvo);
@@ -341,7 +341,7 @@ bool afunila(NoArvBin * f){
 	NoArvBin *p, *a;
 	if (f == NULL) return false;
 	else p = f->pai;
-	
+
 	if(p == NULL) return false;
 	else a = p->pai;
 

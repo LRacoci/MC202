@@ -1,5 +1,5 @@
 /* Nome: Lucas Alves Racoci
- * RA: 156331 
+ * RA: 156331
  * Laboratorio 08 - Menor Ancestral Comum */
 
 #include <stdio.h>
@@ -48,12 +48,12 @@ void link(Arvore A, Arvore B){
 	A->pai = B;
 
 	B->grau++;
-	novo = (Lista)malloc(sizeof(NoLista));
-	novo->ant = B->filhos->ant;
-	novo->prox = B->filhos;
-	novo->arv = A;
-	B->filhos->ant->prox = novo;
-	B->filhos->ant = novo;
+	novo  = (Lista)malloc(sizeof(NoLista));
+	novo->ant  = B->filhos->ant;
+	novo->prox  = B->filhos;
+	novo->arv  = A;
+	B->filhos->ant->prox  = novo;
+	B->filhos->ant  = novo;
 }
 void cut(Arvore A){
 	Lista p;
@@ -97,12 +97,12 @@ void pArv(Arvore A){
 	pArv_aux(A, 0);
 }
 void confere_arvore(Arvore A, char *str);
-Arvore raiz(NoArvore* p);	
+Arvore raiz(NoArvore* p);
 
 /* TAD: Arvore Binária de Busca por Afunilamento */
 /************************************************/
 
-/* ASSINATURA DE OUTRAS FUNÇÕES */ 
+/* ASSINATURA DE OUTRAS FUNÇÕES */
 /*******************************/
 
 Floresta inicializa_floresta(int n){
@@ -137,7 +137,7 @@ void operacao(Floresta in){
 /**********************/
 /*********************/
 
-int main() { 
+int main() {
 	int i, n, m;
 	Floresta entrada;
 	scanf("%d %d", &n, &m);
@@ -145,16 +145,16 @@ int main() {
 	for(i = 0; i < m; i++){
 		operacao(entrada);
 	}
-	
+
 
 	return 0;
-} 
+}
 
-/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */ 
+/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */
 /***********************************/
 /**********************************/
 
-/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
+/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */
 /*****************************************/
 /****************************************/
 
