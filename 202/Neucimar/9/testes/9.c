@@ -41,7 +41,7 @@ void arvore23_libera(Arvore23 t);
 void arvore23_insere(Arvore23 *t, int chave);
 
 /* arvore23_busca() - busca chave na árvore 2-3. Retorna 1 se encontrar ou 0 se não encontrar */
-bool arvore23_busca(Arvore23 t, int chave);
+bool arvore23_busca(Arvore23 t, int chave, Arvore23* pos);
 
 /* arvore23_imprime() - imprime árvore 2-3. */
 void arvore23_imprime(Arvore23 t);
@@ -61,7 +61,7 @@ void spaces(short int s);
 /*programa que implementa arvores 2-3 com chaves inteiras*/
 
 int main(){
-	Arvore23 t;
+	Arvore23 t, ini = NULL, *lixo = &ini;
 	int i,N,chave;
 	char comando[9];
 
@@ -79,7 +79,7 @@ int main(){
 		}
 		else if(!strcmp(comando,"buscar")){
 			scanf("%d", &chave);
-			if (!arvore23_busca(t, chave))
+			if (!arvore23_busca(t, chave, lixo))
 				printf(":(\n");
 			else
 				printf(":)\n");		
@@ -89,6 +89,7 @@ int main(){
 			printf("\n");
 		}
 		arvore23_imprime(t);
+		printf("\n");
 	} 
 	/* libera memória */
 	arvore23_libera(t);
@@ -161,38 +162,41 @@ short int insere_pagina(Arvore23 *t, int chave){
 		/*split()*/
 		meio = ((*t)->nchaves)/2;
 		irmao = insere_pagina(&((*t)->pai), (*t)->chave[meio]);
+		(*t)->chave[meio] = -1;
+		((*t)->nchaves)--;
+		(*t)->pai->filho[irmao-1] = *t;
 		(*t)->pai->filho[irmao] = cria_pagina_arvore23();
 		for(i = meio + 1; i < MAX_CHAVES; i++){
-			(*t)->pai->filho[irmao]->chave[i] = (*t)->chave[i];
 			(*t)->pai->filho[irmao]->filho[i] = (*t)->filho[i];
+			(*t)->pai->filho[irmao]->chave[i] = (*t)->chave[i];
+			(*t)->chave[i] = -1;
+			((*t)->nchaves)--;
 		}
+		(*t)->pai->filho[irmao]->filho[i] = (*t)->filho[i];
+		
+		*t = (*t)->pai;
 		return i;
 	}
 }
 
 void arvore23_insere(Arvore23 *t, int chave){
-	Arvore23 p;
+	Arvore23 inicial = NULL;
+	Arvore23 *pos = &inicial;
 	if(*t == NULL){ /*se t for vazia*/
 		insere_pagina(t, chave);
 		return;
 	}
-	if(arvore23_busca((*t), chave)) /*se chave ja existe em árvore*/ 
+	if(arvore23_busca((*t), chave, pos)) /*se chave ja existe em árvore*/ 
 		return;
-	p = *t;
-	/* Enquanto p não é folha */
-	while(p->filho[0] != NULL){
-		if(chave < p->chave[0]){
-			p = p->filho[0];
-		}else if(chave < p->chave[1]){
-			p = p->filho[1];
-		}else {
-			p = p->filho[2];
-		}
+	if(*pos){
+		insere_pagina(pos, chave);
+	}else{
+		insere_pagina(t, chave);
 	}
-	insere_pagina(&p, chave);
+	
 }
 
-bool arvore23_busca(Arvore23 t, int chave){
+bool arvore23_busca(Arvore23 t, int chave, Arvore23* pos){
 	if(t == NULL){
 		return false;
 	}
@@ -200,15 +204,19 @@ bool arvore23_busca(Arvore23 t, int chave){
 		return true;
 	}
 	if(chave < t->chave[0]){
-		return arvore23_busca(t->filho[0], chave);
+		*pos = t;
+		return arvore23_busca(t->filho[0], chave, pos);
 	}else{
 		if(chave == t->chave[1]){
+			*pos = t;
 			return true;
 		}
 		if(chave < t->chave[1]){
-			return arvore23_busca(t->filho[1], chave);
+			*pos = t;
+			return arvore23_busca(t->filho[1], chave, pos);
 		}else{
-			return arvore23_busca(t->filho[2], chave);
+			*pos = t;
+			return arvore23_busca(t->filho[2], chave, pos);
 		}
 	}
 
