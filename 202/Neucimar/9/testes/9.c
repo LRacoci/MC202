@@ -188,8 +188,10 @@ void arvore23_insere(Arvore23 *t, int chave){
 	}
 	if(arvore23_busca((*t), chave, pos)) /*se chave ja existe em árvore*/ 
 		return;
+
 	if(*pos){
 		insere_pagina(pos, chave);
+		*t = *pos;
 	}else{
 		insere_pagina(t, chave);
 	}
