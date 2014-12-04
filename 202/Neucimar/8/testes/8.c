@@ -147,12 +147,13 @@ void link(Arvore A, Arvore B){
 	Lista novo;
 	A->pai = B;
 
-	novo = (Lista)malloc(sizeof(NoLista));
-	novo->ant = B->filhos->ant;
-	novo->prox = B->filhos;
-	novo->arv = A;
-	B->filhos->ant->prox = novo;
-	B->filhos->ant = novo;
+	B->grau++;
+	novo  = (Lista)malloc(sizeof(NoLista));
+	novo->ant  = B->filhos->ant;
+	novo->prox  = B->filhos;
+	novo->arv  = A;
+	B->filhos->ant->prox  = novo;
+	B->filhos->ant  = novo;
 }
 /* Retira as referências criadas na função anteriror e desaloca o nó
  * na lista de filhos do pai de A que guardava o A */
