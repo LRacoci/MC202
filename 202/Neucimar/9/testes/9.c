@@ -41,7 +41,7 @@ void arvore23_libera(Arvore23 t);
 void arvore23_insere(Arvore23 *t, int chave);
 
 /* insere chave numa página da árvore 2-3 */
-void insere_pagina(Arvore23 *t, int chave);
+short int insere_pagina(Arvore23 *t, int chave);
 
 /* busca chave na árvore 2-3. Retorna 1 se encontrar ou 0 se não encontrar */
 bool arvore23_busca(Arvore23 t, int chave, Arvore23* pos);
@@ -53,8 +53,8 @@ Arvore23 cria_pagina_arvore23();
 
 
 
-void arvore23_imprime_identado(Arvore23 t);
-void arvore23_imprime_identado_aux(Arvore23 t, short int s);
+void pVert(Arvore23 t, char* str);
+void pVert_aux(Arvore23 t, short int s);
 void spaces(short int s);
 
 /* ASSINATURA DE OUTRAS FUNÇÕES */ 
@@ -91,7 +91,8 @@ int main(){
 			arvore23_imprime(t);
 			printf("\n");
 		}
-		arvore23_imprime(t);
+		pVert(t, "");
+		/*arvore23_imprime(t);*/
 		printf("\n");
 	} 
 	/* libera memória */
@@ -144,13 +145,14 @@ Arvore23 cria_pagina_arvore23(){
 	return nova;
 }
 
-void insere_pagina(Arvore23 *t, int chave){
-	short int i, j, irmao, meio;
+short int insere_pagina(Arvore23 *t, int chave){
+	short int i, j, posicao, meio, nchaves, return_value;
+	Arvore23 pai;
 	if(*t == NULL) /*se t for vazia*/{
 		(*t) = cria_pagina_arvore23();
 		(*t)->chave[0] = chave;
 		((*t)->tam)++;
-		return;
+		return 0;
 	}if((*t)->tam < MAX_CHAVES){
 		i = (*t)->tam;
 		while(chave < (*t)->chave[i] && i > 1){
@@ -160,40 +162,43 @@ void insere_pagina(Arvore23 *t, int chave){
 		}
 		(*t)->chave[i] = chave;
 		(*t)->tam++;
+		return i;
 	}else{
 		/*split()*/
 		meio = ((*t)->tam)/2;
-		insere_pagina( &((*t)->pai), (*t)->chave[meio] );
-		irmao = (*t)->pai->tam;
+		
+		posicao = insere_pagina( &((*t)->pai), (*t)->chave[meio] );
 		(*t)->chave[meio] = -1;
+		
+		pai = (*t)->pai;
+
+		nchaves = (*t)->tam;
 		((*t)->tam)--;
-		(*t)->pai->filho[irmao-1] = *t;
 
-		*t = (*t)->pai;
+		pai->filho[posicao] = *t;
 
-		(*t)->filho[irmao] = cria_pagina_arvore23();
+		pai->filho[posicao+1] = cria_pagina_arvore23();
 	
-		(*t)->filho[irmao]->pai = (*t);
+		pai->filho[posicao+1]->pai = pai;
 
-		for(j = 0, i = meio + 1; i < (*t)->tam; i++, j++){
-			(*t)->filho[irmao]->filho[j] = (*t)->filho[irmao-1]->filho[i];
-			(*t)->filho[irmao]->chave[j] = (*t)->filho[irmao-1]->chave[i];
-			(*t)->filho[irmao-1]->chave[i] = -1;
-			(*t)->filho[irmao-1]->filho[i] = NULL;
-			((*t)->filho[irmao-1]->tam)--;
+		for(j = 0, i = meio + 1; i < nchaves; i++, j++){
+			pai->filho[posicao+1]->filho[j] = pai->filho[posicao]->filho[i];
+			pai->filho[posicao+1]->chave[j] = pai->filho[posicao]->chave[i];
+			pai->filho[posicao]->chave[i] = -1;
+			pai->filho[posicao]->filho[i] = NULL;
+			(pai->filho[posicao]->tam)--;
 		}
-		(*t)->filho[irmao]->filho[j] = (*t)->filho[irmao-1]->filho[i];
+		pai->filho[posicao+1]->tam = j;
+		pai->filho[posicao+1]->filho[j] = pai->filho[posicao]->filho[i];
+		pai->filho[posicao]->filho[i] = NULL;
 
-		(*t)->filho[irmao]->tam = j;
+		if(chave < pai->chave[posicao]){
+			return_value = insere_pagina( &(pai->filho[posicao]), chave );
 
-		
-		if(chave < (*t)->chave[irmao-1])
-			insere_pagina( &((*t)->filho[irmao-1]), chave );
-		else{
-			insere_pagina( &((*t)->filho[irmao]), chave);
+		}else{
+			return_value = insere_pagina( &(pai->filho[posicao+1]), chave);
 		}
-		
-
+		return return_value;
 	}
 }
 
@@ -204,7 +209,7 @@ void arvore23_insere(Arvore23 *t, int chave){
 		insere_pagina(t, chave);
 		return;
 	}
-	if(arvore23_busca((*t), chave, pos)) /*se chave ja existe em árvore*/ 
+	if(arvore23_busca(*t, chave, pos)) /*se chave ja existe em árvore*/ 
 		return;
 
 	if(*pos){
@@ -251,20 +256,21 @@ void arvore23_imprime(Arvore23 t){
     }
 }
 
-void arvore23_imprime_identado(Arvore23 t){
-	 arvore23_imprime_identado_aux(t, 0);
+void pVert(Arvore23 t, char* str){
+	 printf("\033[94m/*** %s ***/\033[97m\n", str);
+	 pVert_aux(t, 2);
+	 printf("\033[94m/*** %s ***/\033[97m\n", str);
+
 }
-void arvore23_imprime_identado_aux(Arvore23 t, short int s){
+void pVert_aux(Arvore23 t, short int s){
 	int i;
 	if(t){
 		for(i = 0; i < t->tam; i++){
-			printf("\n");
-			arvore23_imprime_identado_aux(t->filho[i], s+1);
-			printf("\n");
+			pVert_aux(t->filho[i], s+2);
 			spaces(s); printf("%d \n",t->chave[i]);
 		}
 		if(t->filho[i]){
-			arvore23_imprime_identado_aux(t->filho[i], s+1);
+			pVert_aux(t->filho[i], s+2);
 		}
 	}
 
