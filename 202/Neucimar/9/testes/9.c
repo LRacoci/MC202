@@ -31,9 +31,6 @@ typedef struct arvore23_no {
 /* TAD: Arvores 2-3 */
 /*******************/
 
-/* Cria árvore 2-3. */
-Arvore23 arvore23_aloca();
-
 /* Libera árvore 2-3. */
 void arvore23_libera(Arvore23 t);
 
@@ -64,12 +61,9 @@ void spaces(short int s);
 /*programa que implementa arvores 2-3 com chaves inteiras*/
 
 int main(){
-	Arvore23 t, lixo = NULL, *plixo = &lixo;
+	Arvore23 t = NULL, lixo = NULL, *plixo = &lixo;
 	int i,N,chave;
 	char comando[9];
-
-	/* Cria árvore 2-3 */
-	t = arvore23_aloca();
 
 	/*le quantidade de entradas*/
 	scanf("%d\n",&N);
@@ -92,11 +86,11 @@ int main(){
 			printf("\n");
 		}
 		pVert(t, "");
-		/*arvore23_imprime(t);*/
+		arvore23_imprime(t);
 		printf("\n");
 	} 
 	/* libera memória */
-	arvore23_libera(t);
+	/*arvore23_libera(t);*/
 
     return 0;
 }
@@ -112,12 +106,6 @@ int main(){
 
 /* TAD: Arvores 2-3 */
 /*******************/
-
-
-/* Cria árvore 2-3. */
-Arvore23 arvore23_aloca(){
-	return NULL;
-}
 
 /* Libera árvore 2-3. */
 void arvore23_libera(Arvore23 t){
@@ -194,9 +182,11 @@ short int insere_pagina(Arvore23 *t, int chave){
 
 		if(chave < pai->chave[posicao]){
 			return_value = insere_pagina( &(pai->filho[posicao]), chave );
+			*t = pai->filho[posicao];
 
 		}else{
 			return_value = insere_pagina( &(pai->filho[posicao+1]), chave);
+			*t = pai->filho[posicao+1];
 		}
 		return return_value;
 	}
