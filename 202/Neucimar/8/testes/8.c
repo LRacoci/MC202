@@ -9,26 +9,28 @@
 #define MAX 10
 
 
-/* STRUCTS, DEFINIÇÕES E CABEÇALHOS DAS MINHAS FUNÇÕES DA TAD */
+/* STRUCTS, DEFINIÃ‡Ã•ES E CABEÃ‡ALHOS DAS MINHAS FUNÃ‡Ã•ES DA TAD */
 /*************************************************************/
 
 typedef enum bool{false, true} bool;
 
-/* Define estruturas de lista e árvore */
+/* Define estruturas de lista e Ã¡rvore */
 typedef struct Lista NoLista, *Lista;
 typedef struct Arvore NoArvore, *Arvore, **Floresta;
 
-/* Cada nó da árvore tem: ... */
+/* Cada nÃ³ da Ã¡rvore tem: ... */
 struct Arvore{
-	/* ... Informação inteira */ 
+	/* ... InformaÃ§Ã£o inteira */ 
 	int info;
+	/* ... Guarda a profundidade do nÃ³ */
+	int profundidade;
 	/* ... Ponteiro para o pai */
 	Arvore pai;
 	/* ... Uma lista de filhos */
 	Lista filhos;
 };
-/* Uso uma lista duplamente ligada circular com no cabeça
- * cuja informação é uma árvore */
+/* Uso uma lista duplamente ligada circular com no cabeÃ§a
+ * cuja informaÃ§Ã£o Ã© uma Ã¡rvore */
 struct Lista{
 	Arvore arv;
 	Lista prox, ant;
@@ -41,20 +43,15 @@ struct Lista{
 Floresta inicializa_floresta(int n);
 void libera_floresta(Floresta X, int n);
 
-/* Cria árvore geral */
+/* Cria Ã¡rvore geral */
 Arvore cria_arvore(int chave);
 
-/* Realiza as 3 operações definidas no enunciado */
+/* Realiza as 3 operaÃ§Ãµes definidas no enunciado */
 void link(Arvore A, Arvore B);
 void cut(Arvore A);
 void lca(Arvore A, Arvore B);
 
-/* Funções de Debugar */
-void spaces(int n);
-void pArv_aux(Arvore A, int i);
-void pArv(Arvore A, char *str);
-
-/* ASSINATURA DE OUTRAS FUNÇÕES */ 
+/* ASSINATURA DE OUTRAS FUNÃ‡Ã•ES */ 
 /*******************************/
 
 void operacao(Floresta in);
@@ -78,18 +75,18 @@ int main() {
 	return 0;
 } 
 
-/* IMPLEMENTAÇÃO DES OUTRAS FUNÇÕES */ 
+/* IMPLEMENTAÃ‡ÃƒO DES OUTRAS FUNÃ‡Ã•ES */ 
 /***********************************/
 /**********************************/
 
-/* Resolve operações da entrada */
+/* Resolve operaÃ§Ãµes da entrada */
 void operacao(Floresta in){
 	int a, b;
 	char op[MAX];
 	scanf("%s", op);
 	if(strcmp(op, "cut") == 0){
 		scanf("%d", &a);
-		/* Acessa a posição correspondente no vetor */
+		/* Acessa a posiÃ§Ã£o correspondente no vetor */
 		cut(in[a-1]);
 	}else if(strcmp(op, "link") == 0){
 		scanf("%d %d", &a, &b);
@@ -100,14 +97,14 @@ void operacao(Floresta in){
 	}
 }
 
-/* IMPLEMENTAÇÃO DAS FUNÇÕES DE MINHA TAD */ 
+/* IMPLEMENTAÃ‡ÃƒO DAS FUNÃ‡Ã•ES DE MINHA TAD */ 
 /*****************************************/
 /****************************************/
 
 /* TAD: Arvores Gerais */
 /**********************/
 
-/* Inicializa um vetor de árvores e cria uma árvore pra cada posição */
+/* Inicializa um vetor de Ã¡rvores e cria uma Ã¡rvore pra cada posiÃ§Ã£o */
 Floresta inicializa_floresta(int n){
 	int i;
 	Floresta nova = (Floresta) malloc(n * sizeof(Arvore));
@@ -116,7 +113,7 @@ Floresta inicializa_floresta(int n){
 	}
 	return nova;
 }
-/* Libera todas as árvores do vetor de árvores alocadas */
+/* Libera todas as Ã¡rvores do vetor de Ã¡rvores alocadas */
 void libera_floresta(Floresta X, int n){
 	int i;
 	Lista p;
@@ -131,11 +128,13 @@ void libera_floresta(Floresta X, int n){
 }
 
 
-/* Cria um no de arvore e o no cabeça da lista de filhos */
+/* Cria um no de arvore e o no cabeÃ§a da lista de filhos */
 Arvore cria_arvore(int chave){
 	Arvore nova = (Arvore)malloc(sizeof(NoArvore));
 	nova->info = chave;
 	nova->pai = NULL;
+	/* A profundidade de uma arvore de um Ãºnico nÃ³ Ã© 1 */
+	nova->profundidade = 1;
 	nova->filhos = (Lista)malloc(sizeof(NoLista));
 	nova->filhos->prox = nova->filhos;
 	nova->filhos->ant =  nova->filhos;
@@ -146,6 +145,7 @@ Arvore cria_arvore(int chave){
 void link(Arvore A, Arvore B){
 	Lista novo;
 	A->pai = B;
+<<<<<<< HEAD
 
 	B->grau++;
 	novo  = (Lista)malloc(sizeof(NoLista));
@@ -154,8 +154,18 @@ void link(Arvore A, Arvore B){
 	novo->arv  = A;
 	B->filhos->ant->prox  = novo;
 	B->filhos->ant  = novo;
+=======
+	/* Atualiza a profundidade de A */
+	A->profundidade = B->profundidade + 1;
+	novo = (Lista)malloc(sizeof(NoLista));
+	novo->ant = B->filhos->ant;
+	novo->prox = B->filhos;
+	novo->arv = A;
+	B->filhos->ant->prox = novo;
+	B->filhos->ant = novo;
+>>>>>>> d018c112bcc28605d6cce33407a94c1d0aab9c31
 }
-/* Retira as referências criadas na função anteriror e desaloca o nó
+/* Retira as referÃªncias criadas na funÃ§Ã£o anteriror e desaloca o nÃ³
  * na lista de filhos do pai de A que guardava o A */
 void cut(Arvore A){
 	Lista p;
@@ -165,45 +175,37 @@ void cut(Arvore A){
 			p->prox->ant = p->ant;
 			free(p);
 			A->pai = NULL;
+			/* Volta a profundidade pra 1, pq ele n tem mais pai */
+			A->profundidade = 1;
 			return;
 		}
 	}
 }
-/* Acha o ultimo acestrau comum que é pai de A e B ao mesmo tempo */
+/* Acha o ultimo ancestral comum que Ã© ascendente de A e B ao mesmo tempo */
 void lca(Arvore A, Arvore B){
-	Arvore auxA, auxB;
-	/* Percorre os pais de A */
-	for(auxA = A; auxA != NULL; auxA = auxA->pai){
-		/* Percorre os pais de B */
-		for(auxB = B; auxB != NULL; auxB = auxB->pai){
-			/* Se, em algum momento algum nó for igual...*/
-			if(auxA == auxB){
-				/* ...imprimi-se sua informação */
-				printf("%d\n", auxA->info);
-				return;
-			}
+	Arvore auxA = A, auxB = B;
+	/* Iguala as duas profundidades */
+	if (B->profundidade > A->profundidade){
+		while(auxB->profundidade > auxA->profundidade){
+			auxB = auxB->pai;
+		}
+	}else if (A->profundidade > B->profundidade){
+		while(auxA->profundidade > auxB->profundidade){
+			auxA = auxA->pai;
 		}
 	}
+	/* Percorre os pais de A e B ao mesmo tempo*/
+	for(; auxA != NULL; auxA = auxA->pai, auxB = auxB->pai){
+		/* Se em algum momento eles forem iguais */
+		if(auxA == auxB){
+			/* ...imprimi-se sua informaÃ§Ã£o */
+			printf("%d\n", auxA->info);
+			return;
+		}
+	}
+<<<<<<< HEAD
 }
-
-
-/* Funções de Debugar */
-void spaces(int n){
-	while(n > 0){
-		printf("  ");
-		n--;
-	}
-}
-void pArv_aux(Arvore A, int i){
-	Lista p;
-	if(A == NULL){
-		return;
-	}
-	spaces(i); 
-	printf("%d\n", A->info);
-	for(p = A->filhos->prox; p->arv != NULL; p = p->prox){
-		pArv_aux(p->arv, i + 1);
-	}
+=======
 }
 void pArv(Arvore A, char *str){
 	printf("  \033[92m%s\033[97m\n",str);
@@ -283,3 +285,4 @@ int main() {
 	printf("\n");
 }
 >>>>>>> 9adf84216baffee95353bf928114094ecb1651d8
+>>>>>>> 96a4e21dd2451803aad5571f3f4c9832a556a7e7
