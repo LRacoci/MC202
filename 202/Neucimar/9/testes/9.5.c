@@ -190,6 +190,7 @@ bool promove(ArvB atual, int chave, ArvB *filho_dir, int *promove_chave, short i
 		return false;
 
 	return_value = promove(atual->filho[pos], chave, &p_b_RRN, &p_b_chave, ordem);
+	
 	if(!return_value){
 		return return_value;
 	}else if(atual->tam < ordem){
