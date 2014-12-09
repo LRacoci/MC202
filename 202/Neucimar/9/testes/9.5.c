@@ -29,9 +29,6 @@ typedef struct arvB_no {
 /* Cria e inicializa uma página de Árvore B */
 ArvB cria_page(short int ordem);
 
-/* Insere chave numa página da árvore B */
-short int insere_pagina(ArvB *pagina, int chave, short int ordem);
-
 /* Retorna a posição que uma chave está ou deveria 
  * estar, também se a chave foi encontrada */
 short int busca_page(ArvB pagina, int chave, bool *achou);
@@ -344,6 +341,7 @@ void split(int i_chave, ArvB i_RRN, ArvB page, int *promove_chave, ArvB *filho_d
 	}
 	new_page->filho[i] = temp->filho[j];
 	new_page->tam = i;
+	free(temp);
 }
 
 /* Retorna uma copia de src, com os mesmos filhos, e não copia dos filhos */
