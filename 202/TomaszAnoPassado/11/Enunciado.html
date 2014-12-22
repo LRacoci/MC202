@@ -1,0 +1,163 @@
+
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+    <title>Laboratorio 11</TITLE>
+</HEAD>
+<BODY BGCOLOR="#CC9966" TEXT="#000000">
+
+<H3>Instituto de Computa&ccedil;&atilde;o da UNICAMP</H3>
+
+<H3>Disciplina MC202: Segundo Semestre de 2014</H3>
+
+<H3>Laborat&oacute;rio N&ordm; 11</H3>
+
+<I>Prof.</I></TD> <TD><I>Tomasz Kowaltowski </I>
+<P>
+<HR>
+<P>
+
+<P ALIGN="JUSTIFY">
+O objetivo deste laboratório é a implementação e teste de uma pequena
+base de dados que conterá registros referentes a alunos da UNICAMP.
+As informações correspondentes a cada aluno serão o RA e o nome, sendo
+que o RA constituirá a chave para as operações de manipulação da base
+de dados.
+
+<P ALIGN="JUSTIFY">
+Esta base de dados será implementada através de uma tabela de
+espalhamento com encadeamento (<I>hashing with chaining</I>).  A
+tabela terá <I>MaxHash</I> entradas, numeradas de
+<I>0</I> a
+<I>MaxHash-1</I> (a constante <I>MaxHash</I> está declarada no arquivo
+<TT>base.h</TT>.)  A função de espalhamento a ser usada deve ser (já
+declarada no arquivo <TT>base.c</TT>):
+<P>
+<CENTER>
+<I>f(RA)&nbsp; = &nbsp;RA&nbsp;%&nbsp;MaxHash</I>
+</CENTER>
+
+<P>
+<B>Importante</B>: Dentro de cada lista, as entradas deverão estar em
+ordem <U>crescente</U> de RA.
+
+
+
+<P ALIGN="JUSTIFY">
+Analogamente aos laboratórios anteriores, a implementação seguirá a
+idéia de um tipo abstrato de dados realizado através de um par de
+arquivos &nbsp;<tt>base.h</tt> &nbsp;e &nbsp;<tt>base.c</tt>, &nbsp;e
+testado por um programa &nbsp;<tt>principal.c</tt>.  &nbsp;Os arquivos
+&nbsp;<tt>base.h</tt> &nbsp;e &nbsp;<tt>principal.c</tt> &nbsp;são
+fornecidos na íntegra; o arquivo incompleto &nbsp;<tt>base.c</tt> &nbsp;é um
+esboço e deve ser completado.  Os comentários esclarecem a finalidade
+de cada função. <B>Sugestão:</B> Inclua no arquivo
+&nbsp;<TT>base.c</TT> &nbsp;funções auxiliares, particularmente as que
+manipulam as listas ligadas.
+
+<P ALIGN="JUSTIFY"> Diferentemente das tarefas anteriores, o programa
+de teste <tt>principal.c</tt> recebe dois parâmetros que são os nomes
+dos arquivos de entrada.  O primeiro arquivo (<tt>.in1</tt>) contém os
+dados iniciais a serem inseridos na base, uma linha para cada aluno,
+com um espaço em branco separando o RA do nome.  O segundo arquivo
+(<tt>.in2</tt>) contém as operações a serem executadas.  A saída do
+programa de teste continua sendo para o arquivo padrão de saída.
+Desta maneira, a execução do programa de teste pode ser invocada por
+comandos da forma:
+
+<P>
+<pre>
+                 ./principal  arq.in1  arq.in2
+</pre>
+ou <br>
+<pre>
+                 ./principal  arq.in1  arq.in2 > arq.res
+</pre>
+
+<P ALIGN="JUSTIFY"> onde &nbsp;<tt>principal</tt> &nbsp;é o arquivo
+executável gerado pela compilação e &nbsp;<tt>arq.res</tt> &nbsp;é o
+arquivo que conterá os resultados, conforme indicado pela redireção de
+saída.
+
+
+<P ALIGN="JUSTIFY">As operações (ações) interpretadas pelo programa de
+teste são:
+
+<BLOCKQUOTE>
+
+<TABLE>
+<TR>
+<TD WIDTH=5%><B>i</B></TD><TD WIDTH=5%><I>ra</I></TD><TD WIDTH=10%><I>nome</I></TD>
+<TD WIDTH=80%>insere o aluno correspondente na base de dados</TD>
+</TR>
+<TR>
+<TD WIDTH=5%><B>r</B></TD><TD WIDTH=5%><I>ra</I></TD><TD WIDTH=10%><I>&nbsp;</I></TD>
+<TD WIDTH=80%>remove o aluno correspondente da base de dados</TD>
+</TR>
+<TR>
+<TD WIDTH=5%><B>c</B></TD><TD WIDTH=5%><I>ra</I></TD><TD WIDTH=10%><I>&nbsp;</I></TD>
+<TD WIDTH=80%>consulta a base de dados</TD>
+</TR>
+<TR>
+<TD WIDTH=5%><B>w</B></TD><TD WIDTH=5%><I>&nbsp;</I></TD><TD WIDTH=10%><I>&nbsp;</I></TD>
+<TD WIDTH=80%>imprime a base de dados</TD>
+</TR>
+</TABLE>
+
+</BLOCKQUOTE>
+
+
+
+<P ALIGN="JUSTIFY">Note que o programa principal cria uma base
+inicialmente vazia (chamando a função <I>CriaBase</I>) e a coloca na
+variável <I>p</I>. A página deste laboratório apresenta alguns
+conjuntos de arquivos de testes e os seus respectivos resultados.
+
+<P><B><U>Observações</U></B>
+<OL>
+
+<li> <p align="justify"> Um  <b>RA</b> sempre será <b>representado por
+um número inteiro</b> e <b>não</b> é precedido das letras <tt>RA</tt>.
+ 
+<li> <P ALIGN="JUSTIFY">A representação da base como uma tabela de
+espalhamento está escondida do usuário que deve enxergá-la apenas como
+um <i>tipo abstrato de dados</i>. Note no arquivo <tt>base.h</tt> que
+isso é feito em <i>C</i> definindo o tipo <tt>Base</tt> como um
+apontador do tipo <tt>void</tt>.  A declaração do tipo da tabela
+(<I>ImplBase</I>) ficará escondida no arquivo <tt>base.c</tt> onde as
+conversões de tipo apropriadas (<i>casting</i>) deverão ser efetuadas.
+
+<li><P ALIGN="JUSTIFY">Note que a implementação da tabela inclui o
+campo <i>numregs</i> que indica o número de registros contidos na
+tabela.
+
+<li><P ALIGN="JUSTIFY"><b>Não é permitida</b> nenhuma modificação das
+declarações de tipos ou funções já completas do arquivo
+<tt>base.c</tt>.
+
+<li> <P ALIGN="JUSTIFY"> A  administração de memória deve utilizar, em
+lugar   das  funções  <tt>malloc</tt>   e  <tt>free</tt>,   as  macros
+<tt>MALLOC</tt>  e   <tt>FREE</tt>  definidas  no   pacote  modificado
+<tt>balloc</tt>.    As  chamadas  das   macros  são   análogas  às
+respectivas  funções.  Com isto,  ao  final  da  execução do  programa
+principal, será verificado se foi liberada toda a memória dinâmica.
+
+<li><P  align="justify">Veja  no programa  principal  como  é feita  a
+passagem  de parâmetros  na linha  de comando  na  linguagem <i>C</i>.
+
+<li><P align="JUSTIFY">Os arquivos de entrada serão lidos até que seja
+detectada a condição de fim de arquivo (<tt>EOF</tt>).
+
+<LI><P   ALIGN="JUSTIFY">Deve   ser   submetido   apenas   o   arquivo
+<TT>base.c</TT>  que implementa  as funções  especificadas  no arquivo
+<TT>base.h</TT>,   além  de  funções   e  tipos   auxiliares.   
+
+<LI><P ALIGN="JUSTIFY" >O número máximo de submissões é 10. 
+
+</li>
+</OL>
+<P>
+<HR>
+<SMALL><I>Last update: "enunc.html: 2014-11-15 (Sat)  14:57:25 BRST (tk)"</I></SMALL>
+</BODY>
+</HTML>

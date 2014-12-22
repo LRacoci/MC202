@@ -15,12 +15,13 @@ typedef enum bool{false, true} bool;
 
 /* Define um nó de Árvore B sem nó pai, por que este é desnecessário */
 typedef struct arvB_no {
-	/*valor das chaves do no, se existirem*/
-	int *chave;
+	/* valor das chaves do no, se existirem
+	 * Aloca-se uma a mais para o no temp da split */
+	int chave[MAX_CHAVES+1];
 	/*numero de chaves existentes no nó. (Pode ser 1 ou 2) */
 	int tam;
 	/*ponteiros para os nós filhos*/
-	struct arvB_no ** filho;	
+	struct arvB_no * filho[MAX_CHAVES+2];	
 } Page, *ArvB;
 
 /* TAD: Pagina de Arvore B */
@@ -31,14 +32,14 @@ ArvB cria_page(short int ordem);
 
 /* Retorna a posição que uma chave está ou deveria 
  * estar, também se a chave foi encontrada */
-short int busca_page(ArvB pagina, int chave, bool *achou);
+short int busca_page(ArvB tree, int chave, bool *achou);
 
 /* Copia página */
 ArvB copia_page(ArvB src, short int ordem);
 
 /* Insere a chave na árvore com ajuda das 
- * funções promove, split, busca, insere_pagina */
-void insere_chave(ArvB pagina, int chave, ArvB filho_dir);
+ * funções promove, split, busca, insere_tree */
+void insere_chave(ArvB tree, int chave, ArvB filho_dir);
 
 /* Divide o nó temp criado na função em page e new_page */
 void split(int i_chave, ArvB i_RRN, ArvB page, int *promove_chave, ArvB *filho_dir, short int ordem);
@@ -48,16 +49,16 @@ void split(int i_chave, ArvB i_RRN, ArvB page, int *promove_chave, ArvB *filho_d
 /*******************/
 
 /* Libera árvore B. */
-void arvB_libera(ArvB pagina, short int ordem);
+void arvB_libera(ArvB tree, short int ordem);
 
 /* Insere chave na árvore B. Não insere se chave já existir na árvore */
 void arvB_insere(ArvB *raiz, int chave, short int ordem);
 
 /* Retorna true se a chave foi achada e false se não foi */
-bool arvB_busca(ArvB pagina, int chave);
+bool arvB_busca(ArvB tree, int chave);
 
 /* imprime árvore B. */
-void arvB_imprime(ArvB pagina);
+void arvB_imprime(ArvB tree);
 
 /* Essa é a função insere das folhas do neucimar eu sh mudei o nome por causa do retorno */
 bool promove(ArvB atual, int chave, ArvB *filho_dir, int *promove_chave, short int ordem);
@@ -68,13 +69,13 @@ bool promove(ArvB atual, int chave, ArvB *filho_dir, int *promove_chave, short i
 /*******************************/
 
 /* Funções pra imprimir identado (debugação) */
-void pVert(ArvB pagina, char* str);
-void pVert_aux(ArvB pagina, short int s);
+void pVert(ArvB tree, char* str);
+void pVert_aux(ArvB tree, short int s);
 void spaces(short int s);
 
 /* Programa que implementa Arvores B com chaves inteiras na memória */
 int main(){
-	ArvB pagina = NULL;
+	ArvB arvore = NULL;
 	int i, N, chave;
 	char comando[9];
 
@@ -86,38 +87,23 @@ int main(){
 		if (!strcmp(comando,"inserir")){
 			scanf("%d", &chave);
 			
-			/** printf("\033[93mInserir %d\033[97m\n", chave); db identifica **/
-			
-			/** pVert(pagina, "Indent");  db pIdent **/
-			/** arvB_imprime(pagina); db pArv **/
-			/** printf("\n"); db pArv **/
-
-			arvB_insere(&pagina, chave, MAX_CHAVES);
+			arvB_insere(&arvore, chave, MAX_CHAVES);
 		}
 		else if(!strcmp(comando,"buscar")){
 			scanf("%d", &chave);
-			
-			/** printf("\033[93mBuscar %d\033[97m\n", chave); db identifica **/
-			/** pVert(pagina, "Indent");  db pIdent **/
-			/** arvB_imprime(pagina); db pArv **/
-			/** printf("\n"); db pArv **/
-
-			if (!arvB_busca(pagina, chave))
+			if (!arvB_busca(arvore, chave))
 				printf(":(\n");
 			else
 				printf(":)\n");		
 		}
 		else if(!strcmp(comando,"imprimir")){
 			/** printf("\033[93mImprimir\033[97m\n"); db identifica **/
-			arvB_imprime(pagina);
+			arvB_imprime(arvore);
 			printf("\n");
 		}
-		/** pVert(pagina, "Indent");  db pIdent **/
-		/** arvB_imprime(pagina); db pArv **/
-		/** printf("\n"); db pArv **/
 	} 
 	/* libera memória */
-	arvB_libera(pagina, MAX_CHAVES);
+	arvB_libera(arvore, MAX_CHAVES);
 
     return 0;
 }
@@ -128,20 +114,20 @@ int main(){
 
 /* Funções para imprimir a arvore identada na vertical */
                  /* (As próximas 3) */
-void pVert(ArvB pagina, char* str){
+void pVert(ArvB tree, char* str){
 	 printf("\033[94m/*** %s ***/\033[97m\n", str);
-	 pVert_aux(pagina, 2);
+	 pVert_aux(tree, 2);
 	 printf("\033[94m/*** %s ***/\033[97m\n", str);
 }
-void pVert_aux(ArvB pagina, short int s){
+void pVert_aux(ArvB tree, short int s){
 	int i;
-	if(pagina){
-		for(i = 0; i < pagina->tam; i++){
-			pVert_aux(pagina->filho[i], s+2);
-			spaces(s); printf("%d \n",pagina->chave[i]);
+	if(tree){
+		for(i = 0; i < tree->tam; i++){
+			pVert_aux(tree->filho[i], s+2);
+			spaces(s); printf("%d \n",tree->chave[i]);
 		}
-		if(pagina->filho[i]){
-			pVert_aux(pagina->filho[i], s+2);
+		if(tree->filho[i]){
+			pVert_aux(tree->filho[i], s+2);
 		}
 	}
 }
@@ -159,15 +145,13 @@ void spaces(short int s){
 /*****************/
 
 /* Libera árvore B. */
-void arvB_libera(ArvB pagina, short int ordem){
+void arvB_libera(ArvB tree, short int ordem){
 	int i;
-	if(pagina){
+	if(tree){
 		for(i = 0; i <= ordem; i++){
-			arvB_libera(pagina->filho[i], ordem);
+			arvB_libera(tree->filho[i], ordem);
 		}
-		free(pagina->chave);
-		free(pagina->filho);
-		free(pagina);
+		free(tree);
 	}
 }
 /* Função auxiliar de arvB_insere, é a funcção insere 
@@ -183,19 +167,22 @@ bool promove(ArvB atual, int chave, ArvB *filho_dir, int *promove_chave, short i
 		*filho_dir = NULL;
 		return true;
 	}
-	/*POS = posição onde árvore está ou deveria estar*/
+	/*POS = posição onde chave está ou deveria estar*/
 	pos = busca_page(atual, chave, &achou);
 	/*se chave ja existe na página*/ 
 	if(achou) 
 		return false;
 
+	/* Retorna se há algo a promover */
 	return_value = promove(atual->filho[pos], chave, &p_b_RRN, &p_b_chave, ordem);
-	
+	/* Ecoa o valor de return_value em caso negativo pras chamadas superiores */
 	if(!return_value){
-		return return_value;
+		return false;
+	/* Se há espaço pra inserção do que foi promovido */
 	}else if(atual->tam < ordem){
 		insere_chave(atual, p_b_chave, p_b_RRN);
 		return false;
+	/* Senão o nó é quebrado novamente */
 	}else{
 		split(p_b_chave, p_b_RRN, atual, promove_chave, filho_dir, ordem);
 		return true;
@@ -211,8 +198,7 @@ void arvB_insere(ArvB *raiz, int chave, short int ordem){
 		(*raiz)->chave[0] = chave;
 		((*raiz)->tam)++;
 	}
-	/* É verificado se o nó está na página durante 
-	 * a função promove conforme passado em sala de aula */
+	/* Verifica se deve-se promover o que foi devolvido em filho_dir e em promove_chave */
 	if(promove(*raiz, chave, &filho_dir, &promove_chave, ordem)){
 		arvB_insere(&nova_raiz, promove_chave, ordem);
 		nova_raiz->filho[0] = *raiz;
@@ -222,9 +208,9 @@ void arvB_insere(ArvB *raiz, int chave, short int ordem){
 }
 
 /* Retorna true se a chave foi achada e false se não foi */
-bool arvB_busca(ArvB pagina, int chave){
+bool arvB_busca(ArvB tree, int chave){
 	short int i;
-	ArvB p = pagina;
+	ArvB p = tree;
 	while(p != NULL){
 		for(i = 0; i < p->tam; i++){
 			if(chave == p->chave[i]){
@@ -240,20 +226,20 @@ bool arvB_busca(ArvB pagina, int chave){
 
 /* Função não alterada, essa é a única 
  * função que só funciona com Arvores 2-3 */
-void arvB_imprime(ArvB pagina){
-	if(pagina!=NULL){
+void arvB_imprime(ArvB tree){
+	if(tree!=NULL){
 		printf("( ");
-		if (pagina->tam == 1){
-			arvB_imprime(pagina->filho[0]);
-			printf("%d ",pagina->chave[0]);
-			arvB_imprime(pagina->filho[1]);
+		if (tree->tam == 1){
+			arvB_imprime(tree->filho[0]);
+			printf("%d ",tree->chave[0]);
+			arvB_imprime(tree->filho[1]);
 		}
-		else /*pagina->tam == 2*/{
-			arvB_imprime(pagina->filho[0]);
-			printf("%d ",pagina->chave[0]);
-			arvB_imprime(pagina->filho[1]);
-			printf("%d ",pagina->chave[1]);
-			arvB_imprime(pagina->filho[2]);
+		else /*tree->tam == 2*/{
+			arvB_imprime(tree->filho[0]);
+			printf("%d ",tree->chave[0]);
+			arvB_imprime(tree->filho[1]);
+			printf("%d ",tree->chave[1]);
+			arvB_imprime(tree->filho[2]);
 		}
 		printf(") ");
     }
@@ -268,9 +254,6 @@ ArvB cria_page(short int ordem){
 	ArvB nova;
 	nova = (ArvB) malloc(sizeof(Page));
 
-	nova->chave = (int*) malloc(sizeof(int)*  ordem);
-	nova->filho = (ArvB*) malloc(sizeof(ArvB)* (ordem+1));
-
 	nova->tam = 0;
 	for(i = 0; i < ordem; i++){
 		nova->chave[i] = -1;
@@ -281,26 +264,26 @@ ArvB cria_page(short int ordem){
 	return nova;
 }
 /* Insere uma chave e seu filho direito em uma página */
-void insere_chave(Page *pagina, int chave, ArvB filho_dir){
+void insere_chave(Page *tree, int chave, ArvB filho_dir){
 	int i;
 	
 	/* realiza o remanejamento para manter as chave ordenadas */
-	for(i = pagina->tam; i > 0 && pagina->chave[i-1] > chave; i--){
-		pagina->chave[i] = pagina->chave[i-1];
-		pagina->filho[i+1] = pagina->filho[i];
+	for(i = tree->tam; i > 0 && tree->chave[i-1] > chave; i--){
+		tree->chave[i] = tree->chave[i-1];
+		tree->filho[i+1] = tree->filho[i];
 	}
 	/* insere a chave na posição ideal */
-	pagina->chave[i] = chave;
-	pagina->filho[i+1] = filho_dir;
-	pagina->tam++;
+	tree->chave[i] = chave;
+	tree->filho[i+1] = filho_dir;
+	tree->tam++;
 }
-
-short int busca_page(ArvB pagina, int chave, bool *achou){
+/* Devolve onde a chave está ou deveria estar */
+short int busca_page(ArvB tree, int chave, bool *achou){
 	short int pos;
 	*achou = false;
-	for(pos = 0; pos < pagina->tam; pos++){
-		if(chave <= pagina->chave[pos]){
-			if(chave == pagina->chave[pos]){
+	for(pos = 0; pos < tree->tam; pos++){
+		if(chave <= tree->chave[pos]){
+			if(chave == tree->chave[pos]){
 				*achou = true;
 			}
 			return pos;
@@ -322,7 +305,7 @@ void split(int i_chave, ArvB i_RRN, ArvB page, int *promove_chave, ArvB *filho_d
 
 	meio = temp->tam/2;
 	*promove_chave = temp->chave[meio];
-	
+	/* Copia elementos anteriores a meio de temp pra page */
 	for(i = 0; i < meio; i++){
 		page->filho[i] = temp->filho[i];
 		page->chave[i] = temp->chave[i]; 
@@ -330,12 +313,12 @@ void split(int i_chave, ArvB i_RRN, ArvB page, int *promove_chave, ArvB *filho_d
 	page->filho[i] = temp->filho[i];
 	tam = page->tam;
 	page->tam = i;
-
+	/* Atualiza o resto de page */
 	for(i = meio; i < tam; i++){
 		page->filho[i+1] = NULL;
 		page->chave[i] = -1; 
 	}
-	
+	/* Copia elementos posteriores a meio de temp pra new_page */
 	for(i = 0, j = meio + 1; j < temp->tam; i++, j++){
 		new_page->filho[i] = temp->filho[j];
 		new_page->chave[i] = temp->chave[j];
